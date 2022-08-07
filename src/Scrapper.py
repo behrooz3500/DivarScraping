@@ -79,7 +79,7 @@ class Scrapper:
                 time.sleep(self.delay_time)
 
             driver.close()
-
+            self.save_history()
             return links
         except:
             pass
@@ -89,7 +89,6 @@ class Scrapper:
             with open('links.txt', 'r', encoding="utf-8") as f:
                 old_set = set()
                 for line in f:
-
                     strip_lines = line.strip()
                     old_set.add(strip_lines)
             return old_set
@@ -98,3 +97,10 @@ class Scrapper:
 
     def win_arch(self):
         return '64' if machine().endswith('64') else '32'
+
+    def save_history(self):
+        try:
+            with open('history.txt', 'a', encoding="utf-8") as f:
+                f.write(f"{self.URL}\n\n")
+        except:
+            pass
