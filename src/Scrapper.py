@@ -40,9 +40,9 @@ class Scrapper:
         dirname = os.path.dirname(__file__)
         if self.browser == 'Firefox':
             if self.win_arch() == "64":
-                file_name = "geckodriver64.exe"
+                file_name = "Drivers/geckodriver64.exe"
             else:
-                file_name = "geckodriver32.exe"
+                file_name = "Drivers/geckodriver32.exe"
 
             my_dir = os.path.join(dirname, file_name)
             service = Service(executable_path=my_dir)
