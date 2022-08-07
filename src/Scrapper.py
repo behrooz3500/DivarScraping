@@ -27,8 +27,8 @@ class Scrapper:
     def __init__(self, url, scroll_count='2', delay_time='1', pattern='', browser='Firefox'):
 
         self.URL = url
-        self.scroll_count = int(scroll_count)
-        self.delay_time = int(delay_time)
+        self.scroll_count = scroll_count
+        self.delay_time = delay_time
         self.pattern = pattern
         self.browser = browser
 
