@@ -40,7 +40,7 @@ class MainWindow(QMainWindow):
 
         # adding subwidgets to the main window
         self.main_layout = QVBoxLayout()
-        self.main_layout.addWidget(self.url_widget.lb)
+        self.main_layout.addWidget(self.url_widget.edit_combo)
         self.main_layout.addLayout(self.label_widget.layout)
         self.main_layout.addWidget(self.result_widget.scroll_box)
         self.main_layout.addLayout(self.button_widget.layout)
@@ -52,7 +52,7 @@ class MainWindow(QMainWindow):
     def execute_button_clicked(self):
         """Execute button slot: Gather links from Url"""
 
-        u = self.url_widget.lb.text()
+        u = self.url_widget.edit_combo.currentText()
         s = self.label_widget.scroll_count_box.text(),
         d = self.label_widget.delay_box.text()
         p = self.label_widget.pattern_box.text()
@@ -66,7 +66,7 @@ class MainWindow(QMainWindow):
         else:
             self.result_widget.links_box.clear()
             try:
-                scrapper = Scrapper.Scrapper(self.url_widget.lb.text(),
+                scrapper = Scrapper.Scrapper(self.url_widget.edit_combo.currentText(),
                                              int(self.label_widget.scroll_count_box.text()),
                                              int(self.label_widget.delay_box.text()),
                                              self.label_widget.pattern_box.text(),
@@ -95,5 +95,3 @@ class MainWindow(QMainWindow):
                     f.write(f'{link}\n\n')
         else:
             MB.MessageBox(EXECUTE_FIRST_ERROR).pop_up_box()
-
-
