@@ -5,9 +5,10 @@ from src.widgets.subwidgets import Url_Widget as UW,\
                                     Label_Widget as LW, \
                                     Result_Widget as RW, \
                                     Button_Widget as BW
+from src.widgets import Message_Box as MB
 
 # PyQt5
-from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QDesktopWidget
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QDesktopWidget, QMessageBox
 
 
 class MainWindow(QMainWindow):
@@ -60,7 +61,7 @@ class MainWindow(QMainWindow):
 
         # checking that user filled all inputs
         if u == "" or s == "" or d == "" or p == "":
-            self.result_widget.links_box.setPlainText(FILL_THE_BLANKS_ERROR)
+            MB.MessageBox(FILL_THE_BLANKS_ERROR).pop_up_box()
             self.is_generated = False
         else:
             self.result_widget.links_box.clear()
@@ -91,4 +92,6 @@ class MainWindow(QMainWindow):
                 for i, link in enumerate(self.links, 1):
                     f.write(f'{link}\n\n')
         else:
-            self.result_widget.links_box.setPlainText(EXECUTE_FIRST_ERROR)
+            MB.MessageBox(EXECUTE_FIRST_ERROR).pop_up_box()
+            
+
