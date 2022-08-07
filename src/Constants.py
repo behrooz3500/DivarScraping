@@ -33,3 +33,6 @@ EXPORT_BUTTON_TEXT = "Export"
 
 # MessageBox Constants
 BOX_TITLE = "Attention"
+
+# Scraper Constants
+IN_PROGRESS_MESSAGE = "Not available in current version"
