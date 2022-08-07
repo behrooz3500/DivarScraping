@@ -53,11 +53,9 @@ class MainWindow(QMainWindow):
         """Execute button slot: Gather links from Url"""
 
         u = self.url_widget.edit_combo.currentText()
-        s = self.label_widget.scroll_count_box.text(),
+        s = self.label_widget.scroll_count_box.text()
         d = self.label_widget.delay_box.text()
         p = self.label_widget.pattern_box.text()
-
-        old_set = set()
 
         # checking that user filled all inputs
         if u == "" or s == "" or d == "" or p == "":
@@ -83,6 +81,7 @@ class MainWindow(QMainWindow):
                 for i, link in enumerate(self.links, 1):
                     self.result_widget.links_box.appendPlainText(f'{link}\n')
                 self.is_generated = True
+
             except:
                 MB.MessageBox(WRONG_INPUT).pop_up_box()
 
