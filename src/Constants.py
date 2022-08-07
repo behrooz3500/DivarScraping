@@ -7,6 +7,7 @@ WINDOWS_TITLE = "Divar Scraping"
 FILL_THE_BLANKS_ERROR = "Please fill in the blanks"
 OUTPUT_TEXT_FILE_NAME = "links.txt"
 EXECUTE_FIRST_ERROR = "Please Execute the program first"
+WRONG_INPUT = "Please enter valid number"
 
 # Url_Widget Constants
 DEFAULT_URL = 'https://divar.ir/s/iran/home-kitchen?q=%D9%84%D9%88%D8%A7%D8%B2%D9%85%20%D8%AE%D8%A7%D9%86%DA%AF%DB%8C'
