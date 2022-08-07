@@ -2,6 +2,7 @@
 from urllib.parse import unquote
 import time
 import os
+from platform import machine
 
 # selenium
 from selenium.webdriver.common.by import By
@@ -38,7 +39,11 @@ class Scrapper:
 
         dirname = os.path.dirname(__file__)
         if self.browser == 'Firefox':
-            file_name = "geckodriver.exe"
+            if self.win_arch() == "64":
+                file_name = "geckodriver64.exe"
+            else:
+                file_name = "geckodriver32.exe"
+
             my_dir = os.path.join(dirname, file_name)
             service = Service(executable_path=my_dir)
             driver = webdriver.Firefox(service=service)
@@ -83,3 +88,6 @@ class Scrapper:
             return old_set
         except:
             return set()
+
+    def win_arch(self):
+        return '64' if machine().endswith('64') else '32'
