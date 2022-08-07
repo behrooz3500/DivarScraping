@@ -65,24 +65,26 @@ class MainWindow(QMainWindow):
             self.is_generated = False
         else:
             self.result_widget.links_box.clear()
-            scrapper = Scrapper.Scrapper(self.url_widget.lb.text(),
-                                         self.label_widget.scroll_count_box.text(),
-                                         self.label_widget.delay_box.text(),
-                                         self.label_widget.pattern_box.text(),
-                                         self.label_widget.browser_select.currentText()
-                                         )
+            try:
+                scrapper = Scrapper.Scrapper(self.url_widget.lb.text(),
+                                             int(self.label_widget.scroll_count_box.text()),
+                                             int(self.label_widget.delay_box.text()),
+                                             self.label_widget.pattern_box.text(),
+                                             self.label_widget.browser_select.currentText()
+                                             )
+                old_set = scrapper.load_files()
+                self.links.clear()
+                self.links = old_set
+                new_set = scrapper.scrapping()
 
-            old_set = scrapper.load_files()
-            self.links.clear()
-            self.links = old_set
-            new_set = scrapper.scrapping()
+                for i in new_set:
+                    self.links.add(i)
 
-            for i in new_set:
-                self.links.add(i)
-
-            for i, link in enumerate(self.links, 1):
-                self.result_widget.links_box.appendPlainText(f'{link}\n')
-            self.is_generated = True
+                for i, link in enumerate(self.links, 1):
+                    self.result_widget.links_box.appendPlainText(f'{link}\n')
+                self.is_generated = True
+            except:
+                MB.MessageBox(WRONG_INPUT).pop_up_box()
 
     def export_button_clicked(self):
         """Export button slot: Export results to a txt file"""
@@ -93,5 +95,5 @@ class MainWindow(QMainWindow):
                     f.write(f'{link}\n\n')
         else:
             MB.MessageBox(EXECUTE_FIRST_ERROR).pop_up_box()
-            
+
 
