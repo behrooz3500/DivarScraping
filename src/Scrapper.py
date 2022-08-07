@@ -7,9 +7,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 
 # standard
 import os
+
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 class Scrapper:
@@ -38,10 +42,7 @@ class Scrapper:
             driver = webdriver.Firefox(service=service)
 
         else:
-            file_name = ""
-            my_dir = os.path.join(dirname, file_name)
-            service = Service(executable_path=my_dir)
-            driver = webdriver.Firefox(service=service)
+            driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 
         # open base url
         driver.get(self.URL)
