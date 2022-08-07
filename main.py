@@ -1,6 +1,5 @@
 # standard
 import sys
-import os
 
 # internal
 from src.widgets import Main_Window as wd
