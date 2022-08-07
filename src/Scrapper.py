@@ -1,6 +1,7 @@
-# internal
+# standard
 from urllib.parse import unquote
 import time
+import os
 
 # selenium
 from selenium.webdriver.common.by import By
@@ -8,10 +9,11 @@ from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
 
-# standard
-import os
+# internal
+from src.widgets import Message_Box as MB
+from src.Constants import *
+
 
 from webdriver_manager.chrome import ChromeDriverManager
 
@@ -42,29 +44,33 @@ class Scrapper:
             driver = webdriver.Firefox(service=service)
 
         else:
-            driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+            MB.MessageBox(IN_PROGRESS_MESSAGE).pop_up_box()
+            # driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 
-        # open base url
-        driver.get(self.URL)
+        try:
+            # open base url
+            driver.get(self.URL)
 
-        # find body
-        body = driver.find_element(By.TAG_NAME, "body")
+            # find body
+            body = driver.find_element(By.TAG_NAME, "body")
 
-        # links
-        links = set()
+            # links
+            links = set()
 
-        for i in range(self.scroll_count):
-            anchors = body.find_elements(By.TAG_NAME, 'a')
-            for a in anchors:
-                href = a.get_attribute('href')
-                if href.startswith(self.pattern):
-                    links.add(unquote(href))
-            body.send_keys(Keys.PAGE_DOWN)
-            time.sleep(self.delay_time)
+            for i in range(self.scroll_count):
+                anchors = body.find_elements(By.TAG_NAME, 'a')
+                for a in anchors:
+                    href = a.get_attribute('href')
+                    if href.startswith(self.pattern):
+                        links.add(unquote(href))
+                body.send_keys(Keys.PAGE_DOWN)
+                time.sleep(self.delay_time)
 
-        driver.close()
+            driver.close()
 
-        return links
+            return links
+        except:
+            pass
 
     def load_files(self):
         try:
