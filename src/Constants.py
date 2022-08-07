@@ -4,7 +4,7 @@ WINDOW_HEIGHT = 400
 WINDOWS_X = 250
 WINDOWS_Y = 250
 WINDOWS_TITLE = "Divar Scraping"
-FILL_THE_BLANKS_ERROR = "PLEASE FILL IN THE BLANKS"
+FILL_THE_BLANKS_ERROR = "Please fill in the blanks"
 OUTPUT_TEXT_FILE_NAME = "links.txt"
 EXECUTE_FIRST_ERROR = "Please Execute the program first"
 
@@ -29,3 +29,6 @@ LINKS_BOX_HEIGHT = 290
 # Button_Widget Constants
 EXEC_BUTTON_TEXT = "Execute"
 EXPORT_BUTTON_TEXT = "Export"
+
+# MessageBox Constants
+BOX_TITLE = "Attention"
