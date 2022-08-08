@@ -5,8 +5,7 @@ from urllib.parse import unquote
 from src.Constants import *
 
 # PyQt5
-from PyQt5.QtWidgets import QLineEdit, QWidget, QComboBox
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget, QComboBox, QPushButton, QHBoxLayout
 
 
 class UrlWidget(QWidget):
@@ -19,16 +18,13 @@ class UrlWidget(QWidget):
         self.edit_combo = QComboBox()
         self.edit_combo.setEditable(True)
         self.edit_combo.setPlaceholderText(URL_HINT_TEXT)
-        self.edit_combo.addItems(self.load_history())
+        self.edit_combo.setFixedWidth(URL_BOX_WIDTH)
 
-    def load_history(self):
-        history_set = set()
-        try:
-            with open('history.txt', 'rt', encoding="utf-8") as f:
-                for line in f:
-                    strip_lines = line.strip()
-                    history_set.add(strip_lines)
-        except:
-            pass
+        self.clear_history_button = QPushButton()
+        self.clear_history_button.setText(CLEAR_HISTORY_BUTTON_TEXT)
 
-        return history_set
+        self.layout = QHBoxLayout()
+        self.layout.addWidget(self.edit_combo)
+        self.layout.addWidget(self.clear_history_button)
+
+
