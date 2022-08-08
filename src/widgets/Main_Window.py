@@ -8,8 +8,10 @@ from src.widgets.subwidgets import Url_Widget as UW,\
 from src.widgets import Message_Box as MB
 
 # PyQt5
-from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QDesktopWidget, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QDesktopWidget
 
+# standard
+from urllib.parse import unquote
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
@@ -37,13 +39,15 @@ class MainWindow(QMainWindow):
         self.label_widget = LW.LabelWidget()
         self.result_widget = RW.ResultWidget()
         self.button_widget = BW.ButtonWidget(self.execute_button_clicked, self.export_button_clicked)
+        self.url_widget.edit_combo.addItems(self.load_history())
 
         # adding subwidgets to the main window
         self.main_layout = QVBoxLayout()
-        self.main_layout.addWidget(self.url_widget.edit_combo)
+        self.main_layout.addLayout(self.url_widget.layout)
         self.main_layout.addLayout(self.label_widget.layout)
         self.main_layout.addWidget(self.result_widget.scroll_box)
         self.main_layout.addLayout(self.button_widget.layout)
+        self.url_widget.clear_history_button.clicked.connect(self.clear_history_button_clicked)
 
         self.widget = QWidget()
         self.widget.setLayout(self.main_layout)
@@ -81,6 +85,8 @@ class MainWindow(QMainWindow):
                 for i, link in enumerate(self.links, 1):
                     self.result_widget.links_box.appendPlainText(f'{link}\n')
                 self.is_generated = True
+                self.url_widget.edit_combo.addItems(self.load_history())
+
 
             except:
                 MB.MessageBox(WRONG_INPUT).pop_up_box()
@@ -94,3 +100,24 @@ class MainWindow(QMainWindow):
                     f.write(f'{link}\n\n')
         else:
             MB.MessageBox(EXECUTE_FIRST_ERROR).pop_up_box()
+
+    def clear_history_button_clicked(self):
+        if MB.QuestionMessage(self).close_event():
+            with open(OUTPUT_TEXT_FILE_NAME, 'wt', encoding="utf-8") as f:
+                f.write(' ')
+            with open(HISTORY_TEXT_FILE_NAME, 'wt', encoding="utf-8") as f:
+                f.write(' ')
+            self.url_widget.edit_combo.clear()
+
+    def load_history(self):
+        history_set = set()
+        try:
+            with open('history.txt', 'rt', encoding="utf-8") as f:
+                for line in f:
+                    strip_lines = line.strip()
+                    history_set.add(unquote(strip_lines))
+        except:
+            pass
+        self.url_widget.edit_combo.clear()
+        return history_set
+
