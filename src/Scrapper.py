@@ -10,14 +10,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.chrome.service import Service as ChromeService
 
 # internal
 from src.widgets import Message_Box as MB
 from src.Constants import *
-
-
-from webdriver_manager.chrome import ChromeDriverManager
 
 
 class Scrapper:
@@ -47,9 +43,9 @@ class Scrapper:
 
         if self.browser == 'Firefox':
             if self.win_arch() == "64":
-                file_name = "./Drivers/geckodriver64.exe"
+                file_name = FIREFOX_64_DRIVER_DIR
             else:
-                file_name = "./Drivers/geckodriver32.exe"
+                file_name = FIREFOX_32_DRIVER_DIR
 
             my_dir = resource_path(file_name)
             service = Service(executable_path=my_dir)
@@ -57,7 +53,6 @@ class Scrapper:
 
         else:
             MB.MessageBox(IN_PROGRESS_MESSAGE).pop_up_box()
-            # driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 
         try:
             # open base url
@@ -86,7 +81,7 @@ class Scrapper:
 
     def load_files(self):
         try:
-            with open('links.txt', 'r', encoding="utf-8") as f:
+            with open(OUTPUT_TEXT_FILE_NAME, 'r', encoding="utf-8") as f:
                 old_set = set()
                 for line in f:
                     strip_lines = line.strip()
@@ -100,7 +95,7 @@ class Scrapper:
 
     def save_history(self):
         try:
-            with open('history.txt', 'a', encoding="utf-8") as f:
+            with open(HISTORY_TEXT_FILE_NAME, 'a', encoding="utf-8") as f:
                 f.write(f"{self.URL}\n\n")
         except:
             pass
