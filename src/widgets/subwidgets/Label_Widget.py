@@ -1,6 +1,5 @@
 # PyQt5
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLineEdit, QLabel, QComboBox
-from PyQt5.QtCore import Qt
 
 # INTERNAL
 from src.Constants import *
@@ -36,7 +35,7 @@ class LabelWidget(QWidget):
         self.combo_label.setText("Browser")
         self.browser_select = QComboBox()
         self.browser_select.setObjectName("MyComboBox")
-        self.browser_select.addItems(["Firefox", "Chrome"])
+        self.browser_select.addItems(BROWSER_LIST)
 
         self.layout = QHBoxLayout()
 
