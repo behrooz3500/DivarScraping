@@ -7,7 +7,6 @@ WINDOWS_TITLE = "Divar Scraping"
 FILL_THE_BLANKS_ERROR = "Please fill in the blanks"
 OUTPUT_TEXT_FILE_NAME = "links.txt"
 HISTORY_TEXT_FILE_NAME = "history.txt"
-EXECUTE_FIRST_ERROR = "Please Execute the program first"
 WRONG_INPUT = "Please enter valid number"
 
 # Url_Widget Constants

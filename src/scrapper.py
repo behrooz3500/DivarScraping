@@ -16,6 +16,9 @@ from src.widgets import message_box as MB
 from src.constants import *
 
 
+
+
+
 class Scrapper:
     """
     Class to define scraping method from defined url\n
@@ -42,7 +45,7 @@ class Scrapper:
             return os.path.join(base_path, relative_path)
 
         if self.browser == 'Firefox':
-            if self.win_arch() == "64":
+            if win_arch() == "64":
                 file_name = FIREFOX_64_DRIVER_DIR
             else:
                 file_name = FIREFOX_32_DRIVER_DIR
@@ -75,7 +78,7 @@ class Scrapper:
             # variable to check gathered links size change
             count = 0
 
-            # continue main mehotod until after CHECK_NEW_LINK there is no change
+            # continue main method until after CHECK_NEW_LINK there is no change
             while count < CHECK_NEW_LINKS:
                 anchors = body.find_elements(By.TAG_NAME, 'a')
                 i_len = len(links)
@@ -95,6 +98,7 @@ class Scrapper:
                     count = 0
 
                 print(count)
+                export_links(links)
 
             driver.close()
             self.save_history()
@@ -102,23 +106,33 @@ class Scrapper:
         except:
             pass
 
-    def load_files(self):
-        try:
-            with open(OUTPUT_TEXT_FILE_NAME, 'r', encoding="utf-8") as f:
-                old_set = set()
-                for line in f:
-                    strip_lines = line.strip()
-                    old_set.add(strip_lines)
-            return old_set
-        except:
-            return set()
-
-    def win_arch(self):
-        return '64' if machine().endswith('64') else '32'
-
     def save_history(self):
         try:
             with open(HISTORY_TEXT_FILE_NAME, 'a', encoding="utf-8") as f:
                 f.write(f"{self.URL}\n\n")
         except:
             pass
+
+
+def export_links(generated_links):
+    """Export results to a txt file"""
+
+    with open(OUTPUT_TEXT_FILE_NAME, 'wt', encoding="utf-8") as f:
+        for i, link in enumerate(generated_links, 1):
+            f.write(f'{link}\n\n')
+
+
+def load_files():
+    try:
+        with open(OUTPUT_TEXT_FILE_NAME, 'r', encoding="utf-8") as f:
+            old_set = set()
+            for line in f:
+                strip_lines = line.strip()
+                old_set.add(strip_lines)
+        return old_set
+    except:
+        return set()
+
+
+def win_arch():
+    return '64' if machine().endswith('64') else '32'
