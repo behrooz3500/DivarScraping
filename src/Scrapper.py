@@ -47,9 +47,14 @@ class Scrapper:
             else:
                 file_name = FIREFOX_32_DRIVER_DIR
 
+            # block image load to improve page loading speed
+            firefox_profile = webdriver.FirefoxProfile()
+            firefox_profile.set_preference('permissions.default.image', 2)
+            firefox_profile.set_preference('dom.ipc.plugins.enabled.libflashplayer.so', 'false')
+
             my_dir = resource_path(file_name)
             service = Service(executable_path=my_dir)
-            driver = webdriver.Firefox(service=service)
+            driver = webdriver.Firefox(firefox_profile, service=service)
 
         else:
             MB.MessageBox(IN_PROGRESS_MESSAGE).pop_up_box()
