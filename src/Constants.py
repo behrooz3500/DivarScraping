@@ -43,3 +43,4 @@ CLEAR_HISTORY_TEXT = "Clear all histories?"
 IN_PROGRESS_MESSAGE = "Not available in current version"
 FIREFOX_32_DRIVER_DIR = "./Drivers/geckodriver32.exe"
 FIREFOX_64_DRIVER_DIR = "./Drivers/geckodriver64.exe"
+CHECK_NEW_LINKS = 5
