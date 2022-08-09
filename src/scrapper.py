@@ -12,8 +12,8 @@ from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 
 # internal
-from src.widgets import Message_Box as MB
-from src.Constants import *
+from src.widgets import message_box as MB
+from src.constants import *
 
 
 class Scrapper:

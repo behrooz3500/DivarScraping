@@ -2,7 +2,7 @@
 from urllib.parse import unquote
 
 # internal
-from src.Constants import *
+from src.constants import *
 
 # PyQt5
 from PyQt5.QtWidgets import QWidget, QComboBox, QPushButton, QHBoxLayout

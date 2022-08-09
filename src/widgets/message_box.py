@@ -2,7 +2,7 @@
 from PyQt5.QtWidgets import QMessageBox
 
 # internal
-from src.Constants import *
+from src.constants import *
 
 
 class BaseMessageBox:

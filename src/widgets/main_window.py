@@ -1,17 +1,18 @@
 # internal
-from src import Scrapper
-from src.Constants import *
-from src.widgets.subwidgets import Url_Widget as UW,\
-                                    Label_Widget as LW, \
-                                    Result_Widget as RW, \
-                                    Button_Widget as BW
-from src.widgets import Message_Box as MB
+from src import scrapper
+from src.constants import *
+from src.widgets.subwidgets import url_widget as UW,\
+                                    label_widget as LW, \
+                                    result_widget as RW, \
+                                    button_widget as BW
+from src.widgets import message_box as MB
 
 # PyQt5
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QDesktopWidget
 
 # standard
 from urllib.parse import unquote
+
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
@@ -68,16 +69,16 @@ class MainWindow(QMainWindow):
         else:
             self.result_widget.links_box.clear()
             try:
-                scrapper = Scrapper.Scrapper(self.url_widget.edit_combo.currentText(),
-                                             int(self.label_widget.scroll_count_box.text()),
-                                             int(self.label_widget.delay_box.text()),
-                                             self.label_widget.pattern_box.text(),
-                                             self.label_widget.browser_select.currentText()
-                                             )
-                old_set = scrapper.load_files()
+                scrapper_method = scrapper.Scrapper(self.url_widget.edit_combo.currentText(),
+                                                    int(self.label_widget.scroll_count_box.text()),
+                                                    int(self.label_widget.delay_box.text()),
+                                                    self.label_widget.pattern_box.text(),
+                                                    self.label_widget.browser_select.currentText()
+                                                    )
+                old_set = scrapper_method.load_files()
                 self.links.clear()
                 self.links = old_set
-                new_set = scrapper.scrapping()
+                new_set = scrapper_method.scrapping()
 
                 for i in new_set:
                     self.links.add(i)

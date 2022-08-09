@@ -2,7 +2,7 @@
 from PyQt5.QtWidgets import QWidget, QScrollArea, QPlainTextEdit
 
 # internal
-from src.Constants import *
+from src.constants import *
 
 
 class ResultWidget(QWidget):

@@ -2,7 +2,7 @@
 import sys
 
 # internal
-from src.widgets import Main_Window as wd
+from src.widgets import main_window as wd
 
 # PyQt
 from PyQt5.QtWidgets import QApplication
