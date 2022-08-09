@@ -134,5 +134,6 @@ build/
 
 #local files
 links.txt
+history.txt
 LICENSE
 main.spec
