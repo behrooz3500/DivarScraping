@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
         self.url_widget = UW.UrlWidget()
         self.label_widget = LW.LabelWidget()
         self.result_widget = RW.ResultWidget()
-        self.button_widget = BW.ButtonWidget(self.execute_button_clicked, self.export_button_clicked)
+        self.button_widget = BW.ButtonWidget(self.execute_button_clicked)
         self.url_widget.edit_combo.addItems(self.load_history())
 
         # adding subwidgets to the main window
@@ -69,12 +69,7 @@ class MainWindow(QMainWindow):
         else:
             self.result_widget.links_box.clear()
             try:
-                scrapper_method = scrapper.Scrapper(self.url_widget.edit_combo.currentText(),
-                                                    int(self.label_widget.scroll_count_box.text()),
-                                                    int(self.label_widget.delay_box.text()),
-                                                    self.label_widget.pattern_box.text(),
-                                                    self.label_widget.browser_select.currentText()
-                                                    )
+                scrapper_method = scrapper
                 old_set = scrapper_method.load_files()
                 self.links.clear()
                 self.links = old_set
@@ -92,15 +87,6 @@ class MainWindow(QMainWindow):
             except:
                 MB.MessageBox(WRONG_INPUT).pop_up_box()
 
-    def export_button_clicked(self):
-        """Export button slot: Export results to a txt file"""
-
-        if self.is_generated:
-            with open(OUTPUT_TEXT_FILE_NAME, 'wt', encoding="utf-8") as f:
-                for i, link in enumerate(self.links, 1):
-                    f.write(f'{link}\n\n')
-        else:
-            MB.MessageBox(EXECUTE_FIRST_ERROR).pop_up_box()
 
     def clear_history_button_clicked(self):
         if MB.QuestionMessage(self).close_event():
