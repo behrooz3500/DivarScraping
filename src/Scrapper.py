@@ -72,14 +72,29 @@ class Scrapper:
             # links
             links = set()
 
-            for i in range(self.scroll_count):
+            # variable to check gathered links size change
+            count = 0
+
+            # continue main mehotod until after CHECK_NEW_LINK there is no change
+            while count < CHECK_NEW_LINKS:
                 anchors = body.find_elements(By.TAG_NAME, 'a')
+                i_len = len(links)
+
                 for a in anchors:
                     href = a.get_attribute('href')
                     if href.startswith(self.pattern):
                         links.add(unquote(href))
+
                 body.send_keys(Keys.PAGE_DOWN)
                 time.sleep(self.delay_time)
+                f_len = len(links)
+
+                if i_len == f_len:
+                    count += 1
+                else:
+                    count = 0
+
+                print(count)
 
             driver.close()
             self.save_history()
