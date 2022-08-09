@@ -24,7 +24,7 @@ class Scrapper:
     delay_time = delay time in seconds after each scroll to get the links\n
     pattern = pattern of the links to obtain\n
     """
-    def __init__(self, url, scroll_count='2', delay_time='1', pattern='', browser='Firefox'):
+    def __init__(self, url, scroll_count=2, delay_time=1, pattern='', browser='Firefox'):
 
         self.URL = url
         self.scroll_count = scroll_count
@@ -57,6 +57,9 @@ class Scrapper:
         try:
             # open base url
             driver.get(self.URL)
+
+            # maximizing windows
+            driver.maximize_window()
 
             # find body
             body = driver.find_element(By.TAG_NAME, "body")
