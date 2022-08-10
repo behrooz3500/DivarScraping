@@ -16,9 +16,6 @@ from src.widgets import message_box as MB
 from src.constants import *
 
 
-
-
-
 class Scrapper:
     """
     Class to define scraping method from defined url\n
@@ -63,6 +60,7 @@ class Scrapper:
             MB.MessageBox(IN_PROGRESS_MESSAGE).pop_up_box()
 
         try:
+
             # open base url
             driver.get(self.URL)
 
@@ -91,6 +89,7 @@ class Scrapper:
                 body.send_keys(Keys.PAGE_DOWN)
                 time.sleep(self.delay_time)
                 f_len = len(links)
+
 
                 if i_len == f_len:
                     count += 1

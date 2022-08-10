@@ -73,7 +73,7 @@ class MainWindow(QMainWindow):
                 old_set = scrapper_method.load_files()
                 self.links.clear()
                 self.links = old_set
-                new_set = scrapper_method.scrapping()
+                new_set = scrapper_method.Scrapper(u, int(s), int(d), p).scrapping()
 
                 for i in new_set:
                     self.links.add(i)
@@ -83,10 +83,8 @@ class MainWindow(QMainWindow):
                 self.is_generated = True
                 self.url_widget.edit_combo.addItems(self.load_history())
 
-
             except:
                 MB.MessageBox(WRONG_INPUT).pop_up_box()
-
 
     def clear_history_button_clicked(self):
         if MB.QuestionMessage(self).close_event():
