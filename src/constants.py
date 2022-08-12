@@ -1,4 +1,42 @@
-# MainWindow Constants
+class TabWidgetConstants:
+    pass
+
+
+class MainTabConstants:
+    URL_LABEL_TEXT = "Add url      "
+    PATTERN_LABEL_TEXT = "Url pattern"
+    DEFAULT_URL_PATTERN = "https://divar.ir/v"
+    URL_EDIT_BOX_WIDTH = 440
+    PATTERN_EDIT_BOX_WIDTH = 440
+    URL_LIST_WIDTH = 550
+    URL_LIST_HEIGHT = 300
+    URL_ADD_BUTTON = "Add"
+    START_BUTTON_TEXT = "Start"
+    PAUSE_BUTTON_TEXT = "Pause"
+    STOP_BUTTON_TEXT = "Stop"
+
+
+class ResultTabConstants:
+    SHOW_BUTTON_TEXT = "Show links"
+    COMBO_BOX_WIDTH = 440
+
+
+class SettingsTabConstants:
+    AUTOMATIC_RADIO_BUTTON_TEXT = "Automatic"
+    MANUAL_RADIO_BUTTON_TEXT = "Manual"
+    SCROLL_MODE_TEXT = "Scroll mode"
+    SCROLL_NUMBER_TEXT = "Number of scrolls"
+    TIME_OUT_TEXT = "Time out (seconds)"
+    SCROLL_WAIT_TIME_TEXT = "Scroll wait time"
+    PAGE_SIZE_TEXT = "Page size(%)"
+    HIDE_IMAGE_TEXT = "Hide images"
+    MAXIMIZED_WINDOW_TEXT = "Maximize window"
+    TEXT_EDIT_WIDTH = 50
+    SAVE_BUTTON_TEXT = "Save"
+    DEFAULT_BUTTON_TEXT = "Restore to defaults"
+
+
+# TabWidget Constants
 WINDOW_WIDTH = 600
 WINDOW_HEIGHT = 400
 WINDOWS_X = 250
@@ -18,7 +56,6 @@ CLEAR_HISTORY_BUTTON_TEXT = "Clear history"
 # Label_Widget Constants
 SCROLL_COUNT_LABEL_TEXT = "Number of Scrolls:"
 DELAY_LABEL_TEXT = "Delay in seconds:"
-PATTERN_LABEL_TEXT = "Url pattern:"
 PATTERN_BOX_DEFAULT = 'https://divar.ir/v'
 BROWSER_LIST = ["Firefox", "Chrome"]
 SCROLL_INPUT_WIDTH = 40
@@ -43,3 +80,4 @@ IN_PROGRESS_MESSAGE = "Not available in current version"
 FIREFOX_32_DRIVER_DIR = "./Drivers/geckodriver32.exe"
 FIREFOX_64_DRIVER_DIR = "./Drivers/geckodriver64.exe"
 CHECK_NEW_LINKS = 5
+
