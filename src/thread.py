@@ -1,43 +1,88 @@
 # PyQt5
 from PyQt5.QtCore import QObject, pyqtSignal, QThread
+from PyQt5.QtWidgets import QMainWindow, QPushButton, QVBoxLayout, QHBoxLayout, QWidget
 
 # standard
 from threading import Event
 
+# internal
+from src import scrapper as sc
+from src.constants import *
+from src import memory as mem
+
 
 class WorkerSignals(QObject):
     """Scraper Signals"""
-    start = pyqtSignal()
-    stop = pyqtSignal()
-    pause = pyqtSignal()
-    resume = pyqtSignal()
+    error = pyqtSignal(object)
+    # stop = pyqtSignal()
+    # pause = pyqtSignal()
+    # resume = pyqtSignal()
 
 
 class ScrapeEngine(QThread):
     """Scraper Engine"""
-    def __init__(self):
-        super().__init__()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.engine_scraper = sc.Scrapper()
+
         self.stopEvent = Event()
         self.resumeEvent = Event()
+        self.finalEvent = Event()
         self.signals = WorkerSignals()
+        self.time_out_status = True
 
-    def start(self):
-        pass
+    def start(self, *args, **kwargs):
+        self.finalEvent.clear()
+        self.resumeEvent.set()
+        self.stopEvent.clear()
+        super().start(*args, **kwargs)
 
     def stop(self):
-        pass
+        self.resumeEvent.clear()
+        self.quit()
+        self.stopEvent.set()
+        self.resumeEvent.set()
 
     def resume(self):
-        pass
+        self.resumeEvent.set()
 
     def pause(self):
-        pass
+        self.resumeEvent.clear()
 
-    def _do(self):
-        pass
+    def finish(self):
+        self.finalEvent.set()
+
+    def _do(self, url):
+
+        self.engine_scraper.scrapping(url)
+        self.time_out_status = self.engine_scraper.progress_check()
+        print(f"has progress is {self.time_out_status}")
 
     def run(self):
-        pass
+        for url in list(mem.get("urls")):
+            self.engine_scraper.initialize(url)
+            self.start()
+            print(f"run for url: {url}")
+
+            stop_event_status = True
+            self.time_out_status = True
+
+            while stop_event_status and self.time_out_status:
+                try:
+                    self._do(url)
+                except Exception as e:
+                    self.pause()
+                    self.signals.error.emit(e)
+                    print(e)
+                print(f"resume is{self.resumeEvent.is_set()}")
+                print(f"stop is {self.stopEvent.is_set()}")
+                self.resumeEvent.wait()
+                if self.stopEvent.wait(1):
+                    stop_event_status = False
+                print("---------------")
+            print("END RUN")
+            self.engine_scraper.close_current_driver()
+        self.finish()
 
 
 
