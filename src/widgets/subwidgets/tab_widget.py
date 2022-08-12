@@ -1,8 +1,12 @@
 # PyQt5
 from PyQt5.QtWidgets import QWidget, QTabWidget, QDesktopWidget
 
+# internal constants
+from src.constants import SettingsParameterConstants as spc
+from src.constants import TabWidgetConstants as twc
+from src.constants import GlobalConstants as gc
+
 # internal
-from src.constants import *
 from src.widgets.subwidgets import main_tab as mt
 from src.widgets.subwidgets import result_tab as rt
 from src.widgets.subwidgets import settings_tab as st
@@ -19,7 +23,7 @@ class TabWidget(QTabWidget):
         super().__init__()
 
         # setting main window fixed size
-        self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
+        self.setFixedSize(twc.WINDOW_WIDTH, twc.WINDOW_HEIGHT)
 
         # open window in the center of the screen
         qt_rectangle = self.frameGeometry()
@@ -27,7 +31,7 @@ class TabWidget(QTabWidget):
         qt_rectangle.moveCenter(center_point)
         self.move(qt_rectangle.topLeft())
 
-        self.setWindowTitle(WINDOWS_TITLE)
+        self.setWindowTitle(twc.WINDOWS_TITLE)
         self.url_set = set()
         self.thread = th.ScrapeEngine()
         self.change_mode = 1
@@ -48,17 +52,17 @@ class TabWidget(QTabWidget):
         self.main_tab.pause_btn.setDisabled(True)
         self.main_tab.stop_btn.setDisabled(True)
         self.main_tab.start_btn.setDisabled(True)
-        self.setTabText(0, "Main")
+        self.setTabText(0, twc.TAB_1_NAME)
         self.tab1.setLayout(self.main_tab.main_layout)
 
         self.result_tab = rt.ResultTab()
         self.result_tab.show_btn.clicked.connect(self.show_links_btn_clicked)
-        self.setTabText(1, "Result Tab")
+        self.setTabText(1, twc.TAB_2_NAME)
         self.tab2.setLayout(self.result_tab.main_layout)
         self.result_tab.url_combo_list.addItems(self.url_set)
 
         self.settings_tab = st.SettingTab()
-        self.setTabText(2, "Settings")
+        self.setTabText(2, twc.TAB_3_NAME)
         self.settings_tab.manual_radio_btn.toggled.connect(
             lambda: self.manual_radio_button_trigger(self.settings_tab.manual_radio_btn))
 
@@ -68,7 +72,7 @@ class TabWidget(QTabWidget):
 
     def add_btn_clicked(self, url):
         self.url_set.add(url)
-        mem.set("urls", self.url_set)
+        mem.set(gc.URLS_TEXT, self.url_set)
         self.main_tab.url_list.clear()
         self.main_tab.url_text_edit.clear()
         for url in self.url_set:
@@ -76,18 +80,18 @@ class TabWidget(QTabWidget):
         self.main_tab.start_btn.setDisabled(False)
 
     def start_btn_clicked(self):
-        with open("settings.json", 'r') as f:
+        with open(gc.SETTINGS_FILE_NAME, 'r') as f:
             setting = json.load(f)
 
-        mem.set("scroll_mode", setting.get("Scroll mode"))
-        mem.set("scroll_count", setting.get("Number of scrolls"))
-        mem.set("delay_time", setting.get("Scroll wait"))
-        mem.set("time_out", setting.get("Time out"))
-        mem.set("hide_images", setting.get("Hide images"))
-        mem.set("maximize_window", setting.get("Maximize window"))
-        mem.set("pattern", self.main_tab.pattern_box_edit.text())
+        mem.set(spc.SCROLL_MODE, setting.get(spc.SCROLL_MODE))
+        mem.set(spc.SCROLL_COUNT, setting.get(spc.SCROLL_COUNT))
+        mem.set(spc.SCROLL_WAIT_TIME, setting.get(spc.SCROLL_WAIT_TIME))
+        mem.set(spc.SCROLL_TIME_OUT, setting.get(spc.SCROLL_TIME_OUT))
+        mem.set(spc.HIDE_IMAGE_SETTING, setting.get(spc.HIDE_IMAGE_SETTING))
+        mem.set(spc.MAXIMIZE_PAGE_SETTING, setting.get(spc.MAXIMIZE_PAGE_SETTING))
+        mem.set(gc.PATTERN_TEXT, self.main_tab.pattern_box_edit.text())
 
-        self.result_tab.url_combo_list.addItems(mem.get("urls"))
+        self.result_tab.url_combo_list.addItems(mem.get(gc.URLS_TEXT))
         self.thread.start()
         self.main_tab.start_btn.setDisabled(True)
         self.main_tab.pause_btn.setDisabled(False)
@@ -96,10 +100,10 @@ class TabWidget(QTabWidget):
     def pause_btn_clicked(self):
         if self.change_mode == 1:
             self.thread.pause()
-            self.main_tab.pause_btn.setText("Resume")
+            self.main_tab.pause_btn.setText(twc.RESUME_BUTTON_TEXT)
         elif self.change_mode == -1:
             self.thread.resume()
-            self.main_tab.pause_btn.setText("Pause")
+            self.main_tab.pause_btn.setText(twc.PAUSE_BUTTON_TEXT)
         self.change_mode *= -1
 
     def stop_btn_clicked(self):
@@ -129,29 +133,29 @@ class TabWidget(QTabWidget):
         self.settings_tab.hide_image_checkbox.setChecked(True)
         self.settings_tab.windows_maximized_checkbox.setChecked(True)
 
-        dic = {"Scroll mode": "automatic",
-               "Number of scrolls": "1",
-               "Scroll wait": "2",
-               "Time out": "4",
-               "Hide images": True,
-               "Maximize window": True
+        dic = {spc.SCROLL_MODE: spc.SCROLL_MODE_AUTO,
+               spc.SCROLL_COUNT: "1",
+               spc.SCROLL_WAIT_TIME: "2",
+               spc.SCROLL_TIME_OUT: "4",
+               spc.HIDE_IMAGE_SETTING: True,
+               spc.MAXIMIZE_PAGE_SETTING: True
                }
 
-        with open("settings.json", "w") as f:
+        with open(gc.SETTINGS_FILE_NAME, "w") as f:
             json.dump(dic, f)
 
     def save_settings_btn_clicked(self):
         if self.settings_tab.automatic_radio_btn.isChecked():
-            scroll_mode = "automatic"
+            scroll_mode = spc.SCROLL_MODE_AUTO
         else:
-            scroll_mode = "manual"
-        dic = {"Scroll mode": scroll_mode,
-               "Number of scrolls": self.settings_tab.scroll_number.text(),
-               "Scroll wait": self.settings_tab.scroll_wait_time_edit.text(),
-               "Time out": self.settings_tab.time_out_edit.text(),
-               "Hide images": self.settings_tab.hide_image_checkbox.isChecked(),
-               "Maximize window": self.settings_tab.windows_maximized_checkbox.isChecked()
+            scroll_mode = spc.SCROLL_MODE_MANUAL
+        dic = {spc.SCROLL_MODE: scroll_mode,
+               spc.SCROLL_COUNT: self.settings_tab.scroll_number.text(),
+               spc.SCROLL_WAIT_TIME: self.settings_tab.scroll_wait_time_edit.text(),
+               spc.SCROLL_TIME_OUT: self.settings_tab.time_out_edit.text(),
+               spc.HIDE_IMAGE_SETTING: self.settings_tab.hide_image_checkbox.isChecked(),
+               spc.MAXIMIZE_PAGE_SETTING: self.settings_tab.windows_maximized_checkbox.isChecked()
                }
 
-        with open("settings.json", "w") as f:
+        with open(gc.SETTINGS_FILE_NAME, "w") as f:
             json.dump(dic, f)
