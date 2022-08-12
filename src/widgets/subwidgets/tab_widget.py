@@ -2,7 +2,6 @@
 from PyQt5.QtWidgets import QWidget, QTabWidget, QDesktopWidget
 
 # internal
-from src.constants import TabWidgetConstants as twc
 from src.constants import *
 from src.widgets.subwidgets import main_tab as mt
 from src.widgets.subwidgets import result_tab as rt
@@ -12,7 +11,6 @@ from src import thread as th
 from src import utils
 
 # standard
-from urllib.parse import unquote
 import json
 
 
@@ -61,7 +59,9 @@ class TabWidget(QTabWidget):
 
         self.settings_tab = st.SettingTab()
         self.setTabText(2, "Settings")
-        self.settings_tab.manual_radio_btn.toggled.connect(lambda: self.manual_radio_button_trigger(self.settings_tab.manual_radio_btn))
+        self.settings_tab.manual_radio_btn.toggled.connect(
+            lambda: self.manual_radio_button_trigger(self.settings_tab.manual_radio_btn))
+
         self.settings_tab.default_btn.clicked.connect(self.restore_defaults_clicked)
         self.settings_tab.save_btn.clicked.connect(self.save_settings_btn_clicked)
         self.tab3.setLayout(self.settings_tab.main_layout)
@@ -155,15 +155,3 @@ class TabWidget(QTabWidget):
 
         with open("settings.json", "w") as f:
             json.dump(dic, f)
-
-
-
-
-
-
-
-
-
-
-
-
