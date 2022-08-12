@@ -7,6 +7,7 @@ from threading import Event
 # internal
 from src import scrapper as sc
 from src import memory as mem
+from src.constants import GlobalConstants as gc
 
 
 class WorkerSignals(QObject):
@@ -57,7 +58,7 @@ class ScrapeEngine(QThread):
         print(f"has progress is {self.time_out_status}")
 
     def run(self):
-        for url in list(mem.get("urls")):
+        for url in list(mem.get(gc.URLS_TEXT)):
             self.engine_scraper.initialize(url)
             self.start()
             print(f"run for url: {url}")
