@@ -1,4 +1,3 @@
-import sys
 
 
 def file_writer(filename, data):
@@ -31,6 +30,3 @@ def file_name_edit(name):
         name = name.replace(k, v)
 
     return name
-
-
-
