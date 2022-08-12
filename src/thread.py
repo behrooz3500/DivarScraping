@@ -1,13 +1,11 @@
 # PyQt5
 from PyQt5.QtCore import QObject, pyqtSignal, QThread
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QVBoxLayout, QHBoxLayout, QWidget
 
 # standard
 from threading import Event
 
 # internal
 from src import scrapper as sc
-from src.constants import *
 from src import memory as mem
 
 
@@ -83,6 +81,3 @@ class ScrapeEngine(QThread):
             print("END RUN")
             self.engine_scraper.close_current_driver()
         self.finish()
-
-
-
