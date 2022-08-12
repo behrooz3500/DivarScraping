@@ -5,6 +5,7 @@ import os
 import sys
 from platform import machine
 
+
 # selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -14,6 +15,8 @@ from selenium.webdriver.firefox.service import Service
 # internal
 from src.widgets import message_box as MB
 from src.constants import *
+from src import memory as mem
+from src import utils
 
 
 class Scrapper:
@@ -24,15 +27,26 @@ class Scrapper:
     delay_time = delay time in seconds after each scroll to get the links\n
     pattern = pattern of the links to obtain\n
     """
-    def __init__(self, url, scroll_count=2, delay_time=1, pattern='', browser='Firefox'):
-
-        self.URL = url
-        self.scroll_count = scroll_count
-        self.delay_time = delay_time
-        self.pattern = pattern
+    def __init__(self, browser='Firefox'):
+        self.URL = mem.get("url")
+        self.scroll_count = mem.get("scroll_count")
+        self.delay_time = mem.get("delay_time")
+        self.pattern = mem.get("pattern")
+        self.time_out = mem.get("time_out")
         self.browser = browser
+        self.driver = None
+        self.has_progress = True
+        self.links = set()
+        self.count = 0
+        self.scroll_count = 0
+        self.store_name = []
 
-    def scrapping(self):
+    def initialize(self, url):
+
+        self.scroll_count = mem.get("scroll_count")
+        self.delay_time = mem.get("delay_time")
+        self.pattern = mem.get("pattern")
+        self.time_out = mem.get("time_out")
 
         def resource_path(relative_path):
             try:
@@ -46,64 +60,76 @@ class Scrapper:
                 file_name = FIREFOX_64_DRIVER_DIR
             else:
                 file_name = FIREFOX_32_DRIVER_DIR
-
-            # block image load to improve page loading speed
             firefox_profile = webdriver.FirefoxProfile()
-            firefox_profile.set_preference('permissions.default.image', 2)
-            firefox_profile.set_preference('dom.ipc.plugins.enabled.libflashplayer.so', 'false')
+            if mem.get("hide_images"):
+                # block image load to improve page loading speed
+                firefox_profile.set_preference('permissions.default.image', 2)
+                firefox_profile.set_preference('dom.ipc.plugins.enabled.libflashplayer.so', 'false')
 
             my_dir = resource_path(file_name)
             service = Service(executable_path=my_dir)
-            driver = webdriver.Firefox(firefox_profile, service=service)
-
+            self.driver = webdriver.Firefox(firefox_profile, service=service)
         else:
             MB.MessageBox(IN_PROGRESS_MESSAGE).pop_up_box()
 
-        try:
-
-            # open base url
-            driver.get(self.URL)
-
+        # open base url
+        self.driver.get(url)
+        if mem.get("maximize_window"):
             # maximizing windows
-            driver.maximize_window()
+            self.driver.maximize_window()
+        self.count = 0
+        self.has_progress = True
+        self.links.clear()
+        self.scroll_count = 0
+        self.store_name.clear()
 
-            # find body
-            body = driver.find_element(By.TAG_NAME, "body")
+    def scrapping(self, url):
 
-            # links
-            links = set()
+        # find body
+        body = self.driver.find_element(By.TAG_NAME, "body")
 
-            # variable to check gathered links size change
-            count = 0
+        # links
+        anchors = body.find_elements(By.TAG_NAME, 'a')
+        i_len = len(self.links)
 
-            # continue main method until after CHECK_NEW_LINK there is no change
-            while count < CHECK_NEW_LINKS:
-                anchors = body.find_elements(By.TAG_NAME, 'a')
-                i_len = len(links)
+        for a in anchors:
 
-                for a in anchors:
-                    href = a.get_attribute('href')
-                    if href.startswith(self.pattern):
-                        links.add(unquote(href))
-
-                body.send_keys(Keys.PAGE_DOWN)
-                time.sleep(self.delay_time)
-                f_len = len(links)
+            href = a.get_attribute('href')
+            if href.startswith(mem.get("pattern")):
+                class_name = a.find_elements(By.CLASS_NAME, "kt-post-card__bottom-description")
+                for cl in class_name:
+                    attr = cl.get_attribute('title')
+                    if attr.find("پیش") == -1 and attr.find("روز") == -1:
+                        self.store_name.append(attr)
+                    if self.store_name.count(attr) < 2:
+                        self.links.add(unquote(href))
 
 
-                if i_len == f_len:
-                    count += 1
-                else:
-                    count = 0
+        body.send_keys(Keys.PAGE_DOWN)
+        time.sleep(int(mem.get("delay_time")))
+        f_len = len(self.links)
 
-                print(count)
-                export_links(links)
+        a = utils.file_name_edit(url)
+        export_links(self.links, a)
+        print(f"{self.count}>>before checks")
 
-            driver.close()
-            self.save_history()
-            return links
-        except:
-            pass
+        if i_len == f_len:
+            self.count += 1
+        else:
+            self.count = 0
+        print(self.time_out)
+        if self.count > int(self.time_out):
+            self.has_progress = False
+        self.save_history()
+        print(f"{self.count}>>after checks")
+        self.scroll_count += 1
+
+    def close_current_driver(self):
+        self.driver.close()
+
+    def progress_check(self):
+        return self.has_progress
+
 
     def save_history(self):
         try:
@@ -113,10 +139,10 @@ class Scrapper:
             pass
 
 
-def export_links(generated_links):
+def export_links(generated_links, name):
     """Export results to a txt file"""
 
-    with open(OUTPUT_TEXT_FILE_NAME, 'wt', encoding="utf-8") as f:
+    with open(f"{name}.txt", 'wt', encoding="utf-8") as f:
         for i, link in enumerate(generated_links, 1):
             f.write(f'{link}\n\n')
 
