@@ -104,7 +104,6 @@ class Scrapper:
                     if self.store_name.count(attr) < 2:
                         self.links.add(unquote(href))
 
-
         body.send_keys(Keys.PAGE_DOWN)
         time.sleep(int(mem.get("delay_time")))
         f_len = len(self.links)
@@ -129,7 +128,6 @@ class Scrapper:
 
     def progress_check(self):
         return self.has_progress
-
 
     def save_history(self):
         try:
