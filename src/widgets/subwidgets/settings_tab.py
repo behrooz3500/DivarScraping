@@ -1,15 +1,12 @@
 # PyQt5
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget,\
-    QLabel, QTabWidget, QFormLayout,\
-    QPushButton, QLineEdit, QScrollArea,\
-    QPlainTextEdit, QRadioButton, QCheckBox, QDesktopWidget, QComboBox
+# standard
+import json
+
+from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, \
+    QLabel, QFormLayout, QPushButton, QLineEdit, QRadioButton, QCheckBox
 
 # internal
 from src.constants import SettingsTabConstants as stc
-from src import memory as mem
-
-# standard
-import json
 
 
 class SettingTab(QWidget):
@@ -66,4 +63,3 @@ class SettingTab(QWidget):
 
         self.main_layout.addLayout(self.line_one_layout)
         self.main_layout.addLayout(self.btn_layout)
-
