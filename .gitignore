@@ -128,13 +128,16 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-#folders
+# folders
 dist/
 build/
 .idea
 
-#local files
+# local files
 links.txt
 history.txt
 LICENSE
 main.spec
+
+# txt files
+.txt
