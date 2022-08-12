@@ -1,8 +1,5 @@
 # PyQt5
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget,\
-    QLabel, QTabWidget, QFormLayout,\
-    QPushButton, QLineEdit, QScrollArea,\
-    QPlainTextEdit, QRadioButton, QCheckBox, QDesktopWidget, QComboBox
+from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QPushButton, QPlainTextEdit, QComboBox
 
 # internal
 from src.constants import ResultTabConstants as rtc
