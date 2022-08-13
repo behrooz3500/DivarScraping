@@ -72,6 +72,7 @@ class TabWidget(QTabWidget):
         self.tab3.setLayout(self.settings_tab.main_layout)
         self.thread.signals.refresh.connect(self.update_gui)
         self.thread.signals.completed.connect(self.completed_scraping_slot)
+        self.thread.signals.begin_a_url.connect(self.add_new_url_to_combobox)
 
     def add_btn_clicked(self, url):
         self.url_set.add(url)
@@ -95,7 +96,7 @@ class TabWidget(QTabWidget):
             mem.set(spc.MAXIMIZE_PAGE_SETTING, setting.get(spc.MAXIMIZE_PAGE_SETTING))
             mem.set(gc.PATTERN_TEXT, self.main_tab.pattern_box_edit.text())
 
-            self.result_tab.url_combo_list.addItems(mem.get(gc.URLS_TEXT))
+            self.result_tab.url_combo_list.clear()
             self.thread.start()
             self.main_tab.start_btn.setDisabled(True)
             self.main_tab.pause_btn.setDisabled(False)
@@ -175,4 +176,6 @@ class TabWidget(QTabWidget):
         self.main_tab.pause_btn.setDisabled(True)
         self.main_tab.stop_btn.setDisabled(True)
 
+    def add_new_url_to_combobox(self, text):
+        self.result_tab.url_combo_list.addItem(text)
 
