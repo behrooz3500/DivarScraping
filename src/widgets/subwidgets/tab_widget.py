@@ -53,7 +53,6 @@ class TabWidget(QTabWidget):
         self.main_tab.pause_btn.clicked.connect(self.pause_btn_clicked)
         self.main_tab.pause_btn.setDisabled(True)
         self.main_tab.stop_btn.setDisabled(True)
-        self.main_tab.start_btn.setDisabled(True)
         self.setTabText(0, twc.TAB_1_NAME)
         self.tab1.setLayout(self.main_tab.main_layout)
 
