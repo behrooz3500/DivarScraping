@@ -19,6 +19,9 @@ from src.widgets.message_box import MessageBox as mb
 # standard
 import json
 
+# selenium
+from selenium.common import exceptions as seleniomE
+
 
 class TabWidget(QTabWidget):
     def __init__(self):
@@ -70,9 +73,11 @@ class TabWidget(QTabWidget):
         self.settings_tab.default_btn.clicked.connect(self.restore_defaults_clicked)
         self.settings_tab.save_btn.clicked.connect(self.save_settings_btn_clicked)
         self.tab3.setLayout(self.settings_tab.main_layout)
+
         self.thread.signals.refresh.connect(self.update_gui)
         self.thread.signals.completed.connect(self.completed_scraping_slot)
         self.thread.signals.begin_a_url.connect(self.add_new_url_to_combobox)
+        self.thread.signals.error.connect(self.error_manage_slot)
 
     def add_btn_clicked(self, url):
         self.url_set.add(url)
@@ -179,3 +184,11 @@ class TabWidget(QTabWidget):
     def add_new_url_to_combobox(self, text):
         self.result_tab.url_combo_list.addItem(text)
 
+    def error_manage_slot(self, obj):
+        if isinstance(obj, seleniomE.WebDriverException):
+            mb("Browser closed unexpectedly!").pop_up_box()
+        # elif isinstance(obj, seleniomE.InvalidSessionIdException):
+        #     mb("Invalid Session").pop_up_box()
+        # elif isinstance(obj, seleniomE.NoSuchWindowException):
+        #     mb("Error in Browser Connection!").pop_up_box()
+        print(type(obj))
