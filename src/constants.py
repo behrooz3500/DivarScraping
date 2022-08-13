@@ -71,6 +71,7 @@ class ScrapperConstants:
     FIREFOX_64_DRIVER_DIR = "./Drivers/geckodriver64.exe"
 
 
-# MessageBox Constants
-BOX_TITLE = "Attention"
-CLEAR_HISTORY_TEXT = "Clear all histories?"
+class MessageBoxConstants:
+    NO_URL_EXIST = "Please enter new urls to scrape!"
+    BOX_TITLE = "Attention"
+
