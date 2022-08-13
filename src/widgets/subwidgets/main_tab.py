@@ -28,11 +28,11 @@ class MainTab(QWidget):
         self.pattern_box_edit.setFixedWidth(mtc.PATTERN_EDIT_BOX_WIDTH)
         self.pattern_box_edit.setText(mtc.DEFAULT_URL_PATTERN)
 
-        self.url_list_box = QScrollArea()
+        # self.url_list_box = QScrollArea()
         self.url_list = QPlainTextEdit()
-        self.url_list.setDisabled(True)
-        self.url_list.setFixedSize(mtc.URL_LIST_WIDTH, mtc.URL_LIST_HEIGHT)
-        self.url_list_box.setWidget(self.url_list)
+        self.url_list.setReadOnly(True)
+        self.url_list.setFixedWidth(mtc.URL_LIST_WIDTH)
+        # self.url_list_box.setWidget(self.url_list)
 
         self.line_four_layout = QHBoxLayout()
         self.start_btn = QPushButton()
@@ -47,5 +47,5 @@ class MainTab(QWidget):
 
         self.main_layout.addLayout(self.line_one_layout)
         self.main_layout.addLayout(self.pattern_form)
-        self.main_layout.addWidget(self.url_list_box)
+        self.main_layout.addWidget(self.url_list)
         self.main_layout.addLayout(self.line_four_layout)
