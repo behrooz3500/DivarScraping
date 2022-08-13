@@ -73,5 +73,6 @@ class ScrapperConstants:
 
 class MessageBoxConstants:
     NO_URL_EXIST = "Please enter new urls to scrape!"
+    SCRAPING_FINISHED = "Scraping urls finished!"
     BOX_TITLE = "Attention"
 
