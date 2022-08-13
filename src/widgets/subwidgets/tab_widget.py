@@ -78,6 +78,7 @@ class TabWidget(QTabWidget):
         self.thread.signals.completed.connect(self.completed_scraping_slot)
         self.thread.signals.begin_a_url.connect(self.add_new_url_to_combobox)
         self.thread.signals.error.connect(self.error_manage_slot)
+        self.thread.signals.scroll_counter.connect(self.update_link_count)
 
     def add_btn_clicked(self, url):
         self.url_set.add(url)
@@ -181,6 +182,16 @@ class TabWidget(QTabWidget):
         self.main_tab.url_list.setPlainText(url_list)
         self.url_set.remove(text)
 
+    def update_link_count(self, text, count):
+        url_list = self.main_tab.url_list.toPlainText()
+        if count == 1:
+            url_list = url_list.replace(text, f"{text}: had {count} scrolls")
+        else:
+            url_list = url_list.replace(f"{text}: had {count-1} scrolls", f"{text}: had {count} scrolls")
+        self.main_tab.url_list.clear()
+        self.main_tab.url_list.setPlainText(url_list)
+
+
     def completed_scraping_slot(self):
         mb(mbc.SCRAPING_FINISHED).pop_up_box()
         self.main_tab.start_btn.setDisabled(False)
@@ -198,3 +209,5 @@ class TabWidget(QTabWidget):
         # elif isinstance(obj, seleniomE.NoSuchWindowException):
         #     mb("Error in Browser Connection!").pop_up_box()
         print(type(obj))
+
+
