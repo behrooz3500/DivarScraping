@@ -71,6 +71,7 @@ class TabWidget(QTabWidget):
         self.settings_tab.save_btn.clicked.connect(self.save_settings_btn_clicked)
         self.tab3.setLayout(self.settings_tab.main_layout)
         self.thread.signals.refresh.connect(self.update_gui)
+        self.thread.signals.completed.connect(self.completed_scraping_slot)
 
     def add_btn_clicked(self, url):
         self.url_set.add(url)
@@ -113,10 +114,6 @@ class TabWidget(QTabWidget):
 
     def stop_btn_clicked(self):
         self.thread.stop()
-        if self.thread.finalEvent.is_set():
-            self.main_tab.start_btn.setDisabled(False)
-            self.main_tab.pause_btn.setDisabled(True)
-            self.main_tab.stop_btn.setDisabled(True)
 
     def show_links_btn_clicked(self):
         text = self.result_tab.url_combo_list.currentText()
@@ -171,5 +168,10 @@ class TabWidget(QTabWidget):
         self.main_tab.url_list.clear()
         self.main_tab.url_list.setPlainText(url_list)
         self.url_set.remove(text)
+
+    def completed_scraping_slot(self):
+        self.main_tab.start_btn.setDisabled(False)
+        self.main_tab.pause_btn.setDisabled(True)
+        self.main_tab.stop_btn.setDisabled(True)
 
 
