@@ -16,6 +16,7 @@ class WorkerSignals(QObject):
     refresh = pyqtSignal(str)
     completed = pyqtSignal()
     begin_a_url = pyqtSignal(str)
+    scroll_counter = pyqtSignal(str, int)
 
 
 class ScrapeEngine(QThread):
@@ -68,10 +69,12 @@ class ScrapeEngine(QThread):
             self.signals.begin_a_url.emit(url)
             stop_event_status = True
             self.time_out_status = True
-
+            count = 1
             while stop_event_status and self.time_out_status:
                 try:
                     self._do(url)
+                    self.signals.scroll_counter.emit(url, count)
+                    count += 1
                 except Exception as e:
                     self.stop()
                     self.signals.error.emit(e)
