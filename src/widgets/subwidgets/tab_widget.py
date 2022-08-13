@@ -170,6 +170,7 @@ class TabWidget(QTabWidget):
         self.url_set.remove(text)
 
     def completed_scraping_slot(self):
+        mb(mbc.SCRAPING_FINISHED).pop_up_box()
         self.main_tab.start_btn.setDisabled(False)
         self.main_tab.pause_btn.setDisabled(True)
         self.main_tab.stop_btn.setDisabled(True)
