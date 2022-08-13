@@ -2,13 +2,13 @@
 from PyQt5.QtWidgets import QMessageBox
 
 # internal
-from src.constants import *
+from src.constants import MessageBoxConstants as mbc
 
 
 class BaseMessageBox:
     def __init__(self):
         super().__init__()
-        self.title = BOX_TITLE
+        self.title = mbc.BOX_TITLE
         self.message = ""
 
     def pop_up_box(self):
