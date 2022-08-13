@@ -15,7 +15,7 @@ class WorkerSignals(QObject):
     error = pyqtSignal(object)
     refresh = pyqtSignal(str)
     completed = pyqtSignal()
-    # resume = pyqtSignal()
+    begin_a_url = pyqtSignal(str)
 
 
 class ScrapeEngine(QThread):
@@ -62,7 +62,7 @@ class ScrapeEngine(QThread):
             self.engine_scraper.initialize(url)
             self.start()
             print(f"run for url: {url}")
-
+            self.signals.begin_a_url.emit(url)
             stop_event_status = True
             self.time_out_status = True
 
