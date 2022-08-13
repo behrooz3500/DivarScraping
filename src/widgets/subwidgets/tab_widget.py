@@ -100,6 +100,7 @@ class TabWidget(QTabWidget):
             mem.set(spc.HIDE_IMAGE_SETTING, setting.get(spc.HIDE_IMAGE_SETTING))
             mem.set(spc.MAXIMIZE_PAGE_SETTING, setting.get(spc.MAXIMIZE_PAGE_SETTING))
             mem.set(gc.PATTERN_TEXT, self.main_tab.pattern_box_edit.text())
+            mem.set(spc.ERROR_TIME_OUT, self.settings_tab.error_loading_wait_time.text())
 
             self.result_tab.url_combo_list.clear()
             self.thread.start()
