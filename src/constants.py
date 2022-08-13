@@ -35,7 +35,7 @@ class SettingsTabConstants:
     MANUAL_RADIO_BUTTON_TEXT = "Manual"
     SCROLL_MODE_TEXT = "Scroll mode"
     SCROLL_NUMBER_TEXT = "Number of scrolls"
-    TIME_OUT_TEXT = "Time out (seconds)"
+    TIME_OUT_TEXT = "Time out (tries)"
     SCROLL_WAIT_TIME_TEXT = "Scroll wait time"
     PAGE_SIZE_TEXT = "Page size(%)"
     HIDE_IMAGE_TEXT = "Hide images"
