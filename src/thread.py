@@ -14,7 +14,7 @@ class WorkerSignals(QObject):
     """Scraper Signals"""
     error = pyqtSignal(object)
     refresh = pyqtSignal(str)
-    # pause = pyqtSignal()
+    completed = pyqtSignal()
     # resume = pyqtSignal()
 
 
@@ -85,4 +85,4 @@ class ScrapeEngine(QThread):
 
             print(mem.get(gc.URLS_TEXT))
 
-        self.finish()
+        self.signals.completed.emit()
