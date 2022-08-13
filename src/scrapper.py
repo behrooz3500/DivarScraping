@@ -111,7 +111,7 @@ class Scrapper:
         i_len = len(self.links)
         for e in errors:
             print("found the button")
-            for i in range(30):
+            for i in range(int(mem.get(spc.ERROR_TIME_OUT))):
                 time.sleep(1)
                 print(i+1)
             e.click()
