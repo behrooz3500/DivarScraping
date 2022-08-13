@@ -43,6 +43,7 @@ class SettingsTabConstants:
     TEXT_EDIT_WIDTH = 50
     SAVE_BUTTON_TEXT = "Save"
     DEFAULT_BUTTON_TEXT = "Restore to defaults"
+    ERROR_LOADING_WAIT_TIME_TEXT = "Time before page refresh"
 
 
 class SettingsParameterConstants:
@@ -52,6 +53,7 @@ class SettingsParameterConstants:
     SCROLL_MODE_MANUAL = "manual"
     SCROLL_WAIT_TIME = "scroll_wait_time"
     SCROLL_TIME_OUT = "time_out"
+    ERROR_TIME_OUT = "time_before_refresh_button"
     HIDE_IMAGE_SETTING = "hide_image"
     MAXIMIZE_PAGE_SETTING = "maximize_page"
 
@@ -75,4 +77,5 @@ class MessageBoxConstants:
     NO_URL_EXIST = "Please enter new urls to scrape!"
     SCRAPING_FINISHED = "Scraping urls finished!"
     BOX_TITLE = "Attention"
+    SAVE_SETTINGS = "Save Complete!"
 
