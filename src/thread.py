@@ -13,7 +13,7 @@ from src.constants import GlobalConstants as gc
 class WorkerSignals(QObject):
     """Scraper Signals"""
     error = pyqtSignal(object)
-    # stop = pyqtSignal()
+    refresh = pyqtSignal(object)
     # pause = pyqtSignal()
     # resume = pyqtSignal()
 
@@ -81,4 +81,7 @@ class ScrapeEngine(QThread):
                 print("---------------")
             print("END RUN")
             self.engine_scraper.close_current_driver()
+            mem.get(gc.URLS_TEXT).remove(url)
+            print(mem.get(gc.URLS_TEXT))
+            self.signals.refresh.
         self.finish()
