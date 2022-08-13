@@ -138,6 +138,7 @@ class TabWidget(QTabWidget):
         self.settings_tab.automatic_radio_btn.setChecked(True)
         self.settings_tab.time_out_edit.setText("4")
         self.settings_tab.scroll_wait_time_edit.setText("2")
+        self.settings_tab.error_loading_wait_time.setText("30")
         self.settings_tab.hide_image_checkbox.setChecked(True)
         self.settings_tab.windows_maximized_checkbox.setChecked(True)
 
@@ -145,6 +146,7 @@ class TabWidget(QTabWidget):
                spc.SCROLL_COUNT: "1",
                spc.SCROLL_WAIT_TIME: "2",
                spc.SCROLL_TIME_OUT: "4",
+               spc.ERROR_TIME_OUT: "30",
                spc.HIDE_IMAGE_SETTING: True,
                spc.MAXIMIZE_PAGE_SETTING: True
                }
@@ -160,6 +162,7 @@ class TabWidget(QTabWidget):
         dic = {spc.SCROLL_MODE: scroll_mode,
                spc.SCROLL_COUNT: self.settings_tab.scroll_number.text(),
                spc.SCROLL_WAIT_TIME: self.settings_tab.scroll_wait_time_edit.text(),
+               spc.ERROR_TIME_OUT: self.settings_tab.error_loading_wait_time.text(),
                spc.SCROLL_TIME_OUT: self.settings_tab.time_out_edit.text(),
                spc.HIDE_IMAGE_SETTING: self.settings_tab.hide_image_checkbox.isChecked(),
                spc.MAXIMIZE_PAGE_SETTING: self.settings_tab.windows_maximized_checkbox.isChecked()
@@ -167,6 +170,8 @@ class TabWidget(QTabWidget):
 
         with open(gc.SETTINGS_FILE_NAME, "w") as f:
             json.dump(dic, f)
+
+        mb(mbc.SAVE_SETTINGS).pop_up_box()
 
     def update_gui(self, text):
         url_list = self.main_tab.url_list.toPlainText()
