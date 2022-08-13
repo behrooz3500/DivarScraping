@@ -69,6 +69,7 @@ class TabWidget(QTabWidget):
         self.settings_tab.default_btn.clicked.connect(self.restore_defaults_clicked)
         self.settings_tab.save_btn.clicked.connect(self.save_settings_btn_clicked)
         self.tab3.setLayout(self.settings_tab.main_layout)
+        self.thread.signals.refresh.connect(self.update_gui)
 
     def add_btn_clicked(self, url):
         self.url_set.add(url)
@@ -159,3 +160,12 @@ class TabWidget(QTabWidget):
 
         with open(gc.SETTINGS_FILE_NAME, "w") as f:
             json.dump(dic, f)
+
+    def update_gui(self, text):
+        url_list = self.main_tab.url_list.toPlainText()
+        url_list = url_list.replace(text, f"Scraping links finished>>{text}<<")
+        self.main_tab.url_list.clear()
+        self.main_tab.url_list.setPlainText(url_list)
+        self.url_set.remove(text)
+
+
