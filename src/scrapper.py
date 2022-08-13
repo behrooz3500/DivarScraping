@@ -43,6 +43,7 @@ class Scrapper:
         self.count = 0
         self.scroll_count = 0
         self.store_name = []
+        self.no_time_out = True
 
     def initialize(self, url):
 
@@ -50,6 +51,7 @@ class Scrapper:
         self.delay_time = mem.get(spc.SCROLL_WAIT_TIME)
         self.pattern = mem.get(gc.PATTERN_TEXT)
         self.time_out = mem.get(spc.SCROLL_TIME_OUT)
+        self.no_time_out = True
 
         def resource_path(relative_path):
             try:
@@ -102,22 +104,32 @@ class Scrapper:
 
         # find body
         body = self.driver.find_element(By.TAG_NAME, "body")
-
+        self.no_time_out = True
         # links
         anchors = body.find_elements(By.TAG_NAME, 'a')
+        errors = body.find_elements(By.CLASS_NAME, 'kt-button--small')
         i_len = len(self.links)
+        for e in errors:
+            print("found the button")
+            for i in range(30):
+                time.sleep(1)
+                print(i+1)
+            e.click()
+            time.sleep(5)
+            self.no_time_out = False
 
-        for a in anchors:
+        if self.no_time_out:
+            for a in anchors:
 
-            href = a.get_attribute('href')
-            if href.startswith(mem.get(gc.PATTERN_TEXT)):
-                class_name = a.find_elements(By.CLASS_NAME, sc.DIVAR_STORE_CLASS_NAME)
-                for cl in class_name:
-                    attr = cl.get_attribute('title')
-                    if attr.find(sc.DIVAR_ATT1) == -1 and attr.find(sc.DIVAR_ATT2) == -1:
-                        self.store_name.append(attr)
-                    if self.store_name.count(attr) < 2:
-                        self.links.add(unquote(href))
+                href = a.get_attribute('href')
+                if href.startswith(mem.get(gc.PATTERN_TEXT)):
+                    class_name = a.find_elements(By.CLASS_NAME, sc.DIVAR_STORE_CLASS_NAME)
+                    for cl in class_name:
+                        attr = cl.get_attribute('title')
+                        if attr.find(sc.DIVAR_ATT1) == -1 and attr.find(sc.DIVAR_ATT2) == -1:
+                            self.store_name.append(attr)
+                        if self.store_name.count(attr) < 2:
+                            self.links.add(unquote(href))
 
         body.send_keys(Keys.PAGE_DOWN)
         time.sleep(int(mem.get(spc.SCROLL_WAIT_TIME)))
