@@ -59,7 +59,10 @@ class ScrapeEngine(QThread):
 
     def run(self):
         for url in list(mem.get(gc.URLS_TEXT)):
-            self.engine_scraper.initialize(url)
+            try:
+                self.engine_scraper.initialize(url)
+            except Exception as e:
+                self.signals.error.emit(e)
             self.start()
             print(f"run for url: {url}")
             self.signals.begin_a_url.emit(url)
@@ -70,9 +73,9 @@ class ScrapeEngine(QThread):
                 try:
                     self._do(url)
                 except Exception as e:
-                    self.pause()
+                    self.stop()
                     self.signals.error.emit(e)
-                    print(e)
+                    print("caught in while")
                 print(f"resume is{self.resumeEvent.is_set()}")
                 print(f"stop is {self.stopEvent.is_set()}")
                 self.resumeEvent.wait()
@@ -81,7 +84,12 @@ class ScrapeEngine(QThread):
                 print("---------------")
             self.signals.refresh.emit(url)
             print("END RUN")
-            self.engine_scraper.close_current_driver()
+            try:
+                self.engine_scraper.close_current_driver()
+            except Exception as e:
+                self.signals.error.emit(e)
+                print("caught in for")
+
 
             print(mem.get(gc.URLS_TEXT))
 
