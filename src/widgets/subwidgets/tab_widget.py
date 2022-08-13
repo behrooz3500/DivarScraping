@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QWidget, QTabWidget, QDesktopWidget
 from src.constants import SettingsParameterConstants as spc
 from src.constants import TabWidgetConstants as twc
 from src.constants import GlobalConstants as gc
+from src.constants import MessageBoxConstants as mbc
 
 # internal
 from src.widgets.subwidgets import main_tab as mt
@@ -13,6 +14,7 @@ from src.widgets.subwidgets import settings_tab as st
 from src import memory as mem
 from src import thread as th
 from src import utils
+from src.widgets.message_box import MessageBox as mb
 
 # standard
 import json
@@ -81,22 +83,25 @@ class TabWidget(QTabWidget):
         self.main_tab.start_btn.setDisabled(False)
 
     def start_btn_clicked(self):
-        with open(gc.SETTINGS_FILE_NAME, 'r') as f:
-            setting = json.load(f)
+        if self.url_set:
+            with open(gc.SETTINGS_FILE_NAME, 'r') as f:
+                setting = json.load(f)
 
-        mem.set(spc.SCROLL_MODE, setting.get(spc.SCROLL_MODE))
-        mem.set(spc.SCROLL_COUNT, setting.get(spc.SCROLL_COUNT))
-        mem.set(spc.SCROLL_WAIT_TIME, setting.get(spc.SCROLL_WAIT_TIME))
-        mem.set(spc.SCROLL_TIME_OUT, setting.get(spc.SCROLL_TIME_OUT))
-        mem.set(spc.HIDE_IMAGE_SETTING, setting.get(spc.HIDE_IMAGE_SETTING))
-        mem.set(spc.MAXIMIZE_PAGE_SETTING, setting.get(spc.MAXIMIZE_PAGE_SETTING))
-        mem.set(gc.PATTERN_TEXT, self.main_tab.pattern_box_edit.text())
+            mem.set(spc.SCROLL_MODE, setting.get(spc.SCROLL_MODE))
+            mem.set(spc.SCROLL_COUNT, setting.get(spc.SCROLL_COUNT))
+            mem.set(spc.SCROLL_WAIT_TIME, setting.get(spc.SCROLL_WAIT_TIME))
+            mem.set(spc.SCROLL_TIME_OUT, setting.get(spc.SCROLL_TIME_OUT))
+            mem.set(spc.HIDE_IMAGE_SETTING, setting.get(spc.HIDE_IMAGE_SETTING))
+            mem.set(spc.MAXIMIZE_PAGE_SETTING, setting.get(spc.MAXIMIZE_PAGE_SETTING))
+            mem.set(gc.PATTERN_TEXT, self.main_tab.pattern_box_edit.text())
 
-        self.result_tab.url_combo_list.addItems(mem.get(gc.URLS_TEXT))
-        self.thread.start()
-        self.main_tab.start_btn.setDisabled(True)
-        self.main_tab.pause_btn.setDisabled(False)
-        self.main_tab.stop_btn.setDisabled(False)
+            self.result_tab.url_combo_list.addItems(mem.get(gc.URLS_TEXT))
+            self.thread.start()
+            self.main_tab.start_btn.setDisabled(True)
+            self.main_tab.pause_btn.setDisabled(False)
+            self.main_tab.stop_btn.setDisabled(False)
+        else:
+            mb(mbc.NO_URL_EXIST).pop_up_box()
 
     def pause_btn_clicked(self):
         if self.change_mode == 1:
