@@ -18,6 +18,7 @@ class ResultTab(QWidget):
         self.show_btn.setText(rtc.SHOW_BUTTON_TEXT)
 
         self.result_links = QPlainTextEdit()
+        self.result_links.setReadOnly(True)
 
         self.line_one_layout.addWidget(self.url_combo_list)
         self.line_one_layout.addWidget(self.show_btn)
