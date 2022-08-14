@@ -12,7 +12,7 @@ from src.constants import GlobalConstants as gc
 
 class WorkerSignals(QObject):
     """Scraper Signals"""
-    error = pyqtSignal(object)
+    error = pyqtSignal(object, int)
     refresh = pyqtSignal(str)
     completed = pyqtSignal()
     begin_a_url = pyqtSignal(str)
@@ -60,10 +60,12 @@ class ScrapeEngine(QThread):
 
     def run(self):
         for url in list(mem.get(gc.URLS_TEXT)):
+            error_count = 0
             try:
                 self.engine_scraper.initialize(url)
             except Exception as e:
-                self.signals.error.emit(e)
+                self.signals.error.emit(e, error_count)
+                error_count += 1
             self.start()
             print(f"run for url: {url}")
             self.signals.begin_a_url.emit(url)
@@ -77,7 +79,8 @@ class ScrapeEngine(QThread):
                     count += 1
                 except Exception as e:
                     self.stop()
-                    self.signals.error.emit(e)
+                    self.signals.error.emit(e, error_count)
+                    error_count += 1
                     print("caught in while")
                 print(f"resume is{self.resumeEvent.is_set()}")
                 print(f"stop is {self.stopEvent.is_set()}")
@@ -90,7 +93,8 @@ class ScrapeEngine(QThread):
             try:
                 self.engine_scraper.close_current_driver()
             except Exception as e:
-                self.signals.error.emit(e)
+                self.signals.error.emit(e, error_count)
+                error_count += 1
                 print("caught in for")
 
 
