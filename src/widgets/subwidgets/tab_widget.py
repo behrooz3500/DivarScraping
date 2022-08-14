@@ -134,6 +134,9 @@ class TabWidget(QTabWidget):
             self.main_tab.start_btn.setDisabled(True)
             self.main_tab.pause_btn.setDisabled(False)
             self.main_tab.stop_btn.setDisabled(False)
+            self.main_tab.url_add_btn.setDisabled(True)
+            self.main_tab.url_text_edit.setDisabled(True)
+            self.main_tab.pattern_box_edit.setDisabled(True)
         else:
             mb(mbc.NO_URL_EXIST).pop_up_box()
 
@@ -222,6 +225,9 @@ class TabWidget(QTabWidget):
         self.main_tab.start_btn.setDisabled(False)
         self.main_tab.pause_btn.setDisabled(True)
         self.main_tab.stop_btn.setDisabled(True)
+        self.main_tab.url_add_btn.setDisabled(False)
+        self.main_tab.url_text_edit.setDisabled(False)
+        self.main_tab.pattern_box_edit.setDisabled(False)
 
     def add_new_url_to_combobox(self, text):
 
