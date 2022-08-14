@@ -21,6 +21,7 @@ def file_appender(filename, data):
 
 
 def file_name_edit(name):
+    """change urls to be appliable for a text file"""
     char_to_replace = {".": "_",
                        "/": "_",
                        "*": "",

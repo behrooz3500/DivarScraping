@@ -105,7 +105,7 @@ class ScrapeEngine(QThread):
                 self.signals.error.emit(e, error_count)
                 error_count += 1
                 print("caught in for")
-                
+
             print(mem.get(gc.URLS_TEXT))
 
         self.signals.completed.emit()
