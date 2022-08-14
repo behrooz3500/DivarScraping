@@ -71,6 +71,7 @@ class ScrapperConstants:
     DIVAR_ATT2 = "روز"
     FIREFOX_32_DRIVER_DIR = "./Drivers/geckodriver32.exe"
     FIREFOX_64_DRIVER_DIR = "./Drivers/geckodriver64.exe"
+    WAIT_TIME_AFTER_TIMEOUT_CLICK = 5
 
 
 class MessageBoxConstants:
@@ -81,4 +82,16 @@ class MessageBoxConstants:
     WRONG_URL_TEXT = "Please add a valid url!"
     NOT_FOUND_URL = "Url not found!"
     DIVAR_URL = "Please enter a valid url from divar.ir"
+    BROWSER_CLOSED_ERROR = "Browser closed unexpectedly!"
 
+
+class DefaultSettingsParameters:
+    SCROLL_MODE = "automatic"
+    AUTOMATIC_COMBO_CHECKED = True
+    MANUAL_COMBO_CHECKED = False
+    SCROLL_COUNT = "1"
+    SCROLL_WAIT_TIME = "2"
+    SCROLL_TIME_OUT = "4"
+    ERROR_TIME_OUT = "30"
+    HIDE_IMAGE_SETTING = True
+    MAXIMIZE_PAGE_SETTING = True
