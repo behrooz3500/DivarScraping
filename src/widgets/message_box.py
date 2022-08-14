@@ -1,5 +1,6 @@
 # PyQt5
 from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtGui import QIcon
 
 # internal
 from src.constants import MessageBoxConstants as mbc
@@ -10,9 +11,11 @@ class BaseMessageBox:
         super().__init__()
         self.title = mbc.BOX_TITLE
         self.message = ""
+        self.icon = QIcon("./resources/scrape.ico")
 
     def pop_up_box(self):
         message = QMessageBox()
+        message.setWindowIcon(self.icon)
         message.setWindowTitle(self.title)
         message.setText(self.message)
         message.exec_()
@@ -27,8 +30,6 @@ class MessageBox(BaseMessageBox):
 class QuestionMessage(BaseMessageBox):
     def __init__(self, parent):
         super().__init__()
-        self.message = QMessageBox.question(parent, self.title, CLEAR_HISTORY_TEXT,
-                                            QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
     def close_event(self):
         if self.message == QMessageBox.Yes:

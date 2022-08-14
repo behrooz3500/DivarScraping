@@ -1,5 +1,6 @@
 # PyQt5
 from PyQt5.QtWidgets import QWidget, QTabWidget, QDesktopWidget
+from PyQt5.QtGui import QIcon
 
 # internal constants
 from src.constants import SettingsParameterConstants as spc
@@ -29,16 +30,8 @@ class TabWidget(QTabWidget):
     def __init__(self):
         super().__init__()
 
-        # setting main window fixed size
-        self.setFixedSize(twc.WINDOW_WIDTH, twc.WINDOW_HEIGHT)
+        self.boot_strap()
 
-        # open window in the center of the screen
-        qt_rectangle = self.frameGeometry()
-        center_point = QDesktopWidget().availableGeometry().center()
-        qt_rectangle.moveCenter(center_point)
-        self.move(qt_rectangle.topLeft())
-
-        self.setWindowTitle(twc.WINDOWS_TITLE)
         self.url_set = set()
         self.thread = th.ScrapeEngine()
         self.change_mode = 1
@@ -82,6 +75,20 @@ class TabWidget(QTabWidget):
         self.thread.signals.error.connect(self.error_manage_slot)
         self.thread.signals.scroll_counter.connect(self.update_link_count)
 
+    def boot_strap(self):
+        # setting main window fixed size
+        self.setFixedSize(twc.WINDOW_WIDTH, twc.WINDOW_HEIGHT)
+
+        # open window in the center of the screen
+        qt_rectangle = self.frameGeometry()
+        center_point = QDesktopWidget().availableGeometry().center()
+        qt_rectangle.moveCenter(center_point)
+        self.move(qt_rectangle.topLeft())
+
+        self.setWindowTitle(twc.WINDOWS_TITLE)
+        icon = QIcon("./resources/scrape.ico")
+        self.setWindowIcon(icon)
+
     def add_btn_clicked(self, url):
         regex_str = "^https://divar.ir"
         try:
@@ -101,7 +108,6 @@ class TabWidget(QTabWidget):
         except Exception as e:
             print(str(e))
             mb(mbc.NO_URL_EXIST).pop_up_box()
-
 
     def start_btn_clicked(self):
         if self.url_set:
