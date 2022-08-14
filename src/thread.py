@@ -12,10 +12,20 @@ from src.constants import GlobalConstants as gc
 
 class WorkerSignals(QObject):
     """Scraper Signals"""
+
+    # signal when an error occurs(error object, number of errors happened)
     error = pyqtSignal(object, int)
+
+    # signal to refresh main gui when a url is finished
     refresh = pyqtSignal(str)
+
+    # signal to show that scraping is finished
     completed = pyqtSignal()
+
+    # signal for starting a new url
     begin_a_url = pyqtSignal(str)
+
+    # signal for counting scroll count for current url
     scroll_counter = pyqtSignal(str, int)
 
 
@@ -24,7 +34,6 @@ class ScrapeEngine(QThread):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.engine_scraper = sc.Scrapper()
-
         self.stopEvent = Event()
         self.resumeEvent = Event()
         self.finalEvent = Event()
@@ -96,8 +105,7 @@ class ScrapeEngine(QThread):
                 self.signals.error.emit(e, error_count)
                 error_count += 1
                 print("caught in for")
-
-
+                
             print(mem.get(gc.URLS_TEXT))
 
         self.signals.completed.emit()
