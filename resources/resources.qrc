@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="resources">
+        <file>scrape.ico</file>
+    </qresource>
+</RCC>
