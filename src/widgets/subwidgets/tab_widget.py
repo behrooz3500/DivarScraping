@@ -18,9 +18,11 @@ from src.widgets.message_box import MessageBox as mb
 
 # standard
 import json
+import requests
+import re
 
 # selenium
-from selenium.common import exceptions as seleniomE
+from selenium.common import exceptions as seleniumE
 
 
 class TabWidget(QTabWidget):
@@ -81,13 +83,25 @@ class TabWidget(QTabWidget):
         self.thread.signals.scroll_counter.connect(self.update_link_count)
 
     def add_btn_clicked(self, url):
-        self.url_set.add(url)
-        mem.set(gc.URLS_TEXT, self.url_set)
-        self.main_tab.url_list.clear()
-        self.main_tab.url_text_edit.clear()
-        for url in self.url_set:
-            self.main_tab.url_list.appendPlainText(url)
-        self.main_tab.start_btn.setDisabled(False)
+        regex_str = "^https://divar.ir"
+        try:
+            if re.search(regex_str, url):
+                if requests.get(url).status_code == 200:
+                    self.url_set.add(url)
+                    mem.set(gc.URLS_TEXT, self.url_set)
+                    self.main_tab.url_list.clear()
+                    self.main_tab.url_text_edit.clear()
+                    for url in self.url_set:
+                        self.main_tab.url_list.appendPlainText(url)
+                    self.main_tab.start_btn.setDisabled(False)
+                else:
+                    mb(mbc.NOT_FOUND_URL).pop_up_box()
+            else:
+                mb(mbc.DIVAR_URL).pop_up_box()
+        except Exception as e:
+            print(str(e))
+            mb(mbc.NO_URL_EXIST).pop_up_box()
+
 
     def start_btn_clicked(self):
         if self.url_set:
@@ -191,7 +205,6 @@ class TabWidget(QTabWidget):
         self.main_tab.url_list.clear()
         self.main_tab.url_list.setPlainText(url_list)
 
-
     def completed_scraping_slot(self):
         mb(mbc.SCRAPING_FINISHED).pop_up_box()
         self.main_tab.start_btn.setDisabled(False)
@@ -199,14 +212,16 @@ class TabWidget(QTabWidget):
         self.main_tab.stop_btn.setDisabled(True)
 
     def add_new_url_to_combobox(self, text):
+
         self.result_tab.url_combo_list.addItem(text)
 
-    def error_manage_slot(self, obj):
-        if isinstance(obj, seleniomE.WebDriverException):
+    def error_manage_slot(self, obj, count):
+        if isinstance(obj, seleniumE.WebDriverException) and count ==0:
             mb("Browser closed unexpectedly!").pop_up_box()
-        # elif isinstance(obj, seleniomE.InvalidSessionIdException):
+            print(type(obj))
+        # elif isinstance(obj, seleniumE.InvalidSessionIdException):
         #     mb("Invalid Session").pop_up_box()
-        # elif isinstance(obj, seleniomE.NoSuchWindowException):
+        # elif isinstance(obj, seleniumE.NoSuchWindowException):
         #     mb("Error in Browser Connection!").pop_up_box()
         print(type(obj))
 
