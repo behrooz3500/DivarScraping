@@ -7,6 +7,7 @@ from src.constants import SettingsParameterConstants as spc
 from src.constants import TabWidgetConstants as twc
 from src.constants import GlobalConstants as gc
 from src.constants import MessageBoxConstants as mbc
+from src.constants import DefaultSettingsParameters as dfp
 
 # internal
 from src.widgets.subwidgets import main_tab as mt
@@ -36,6 +37,7 @@ class TabWidget(QTabWidget):
         self.thread = th.ScrapeEngine()
         self.change_mode = 1
 
+        # defining tabs for the tab widget
         self.tab1 = QWidget()
         self.tab2 = QWidget()
         self.tab3 = QWidget()
@@ -90,6 +92,8 @@ class TabWidget(QTabWidget):
         self.setWindowIcon(icon)
 
     def add_btn_clicked(self, url):
+
+        # checking urls (must be valid urls from divar.ir)
         regex_str = "^https://divar.ir"
         try:
             if re.search(regex_str, url):
@@ -114,6 +118,7 @@ class TabWidget(QTabWidget):
             with open(gc.SETTINGS_FILE_NAME, 'r') as f:
                 setting = json.load(f)
 
+            # storing setting parameters in memory dict
             mem.set(spc.SCROLL_MODE, setting.get(spc.SCROLL_MODE))
             mem.set(spc.SCROLL_COUNT, setting.get(spc.SCROLL_COUNT))
             mem.set(spc.SCROLL_WAIT_TIME, setting.get(spc.SCROLL_WAIT_TIME))
@@ -157,20 +162,20 @@ class TabWidget(QTabWidget):
             self.settings_tab.scroll_number.setDisabled(True)
 
     def restore_defaults_clicked(self):
-        self.settings_tab.automatic_radio_btn.setChecked(True)
-        self.settings_tab.time_out_edit.setText("4")
-        self.settings_tab.scroll_wait_time_edit.setText("2")
-        self.settings_tab.error_loading_wait_time.setText("30")
-        self.settings_tab.hide_image_checkbox.setChecked(True)
-        self.settings_tab.windows_maximized_checkbox.setChecked(True)
+        self.settings_tab.automatic_radio_btn.setChecked(dfp.AUTOMATIC_COMBO_CHECKED)
+        self.settings_tab.time_out_edit.setText(dfp.SCROLL_TIME_OUT)
+        self.settings_tab.scroll_wait_time_edit.setText(dfp.SCROLL_WAIT_TIME)
+        self.settings_tab.error_loading_wait_time.setText(dfp.ERROR_TIME_OUT)
+        self.settings_tab.hide_image_checkbox.setChecked(dfp.HIDE_IMAGE_SETTING)
+        self.settings_tab.windows_maximized_checkbox.setChecked(dfp.MAXIMIZE_PAGE_SETTING)
 
         dic = {spc.SCROLL_MODE: spc.SCROLL_MODE_AUTO,
-               spc.SCROLL_COUNT: "1",
-               spc.SCROLL_WAIT_TIME: "2",
-               spc.SCROLL_TIME_OUT: "4",
-               spc.ERROR_TIME_OUT: "30",
-               spc.HIDE_IMAGE_SETTING: True,
-               spc.MAXIMIZE_PAGE_SETTING: True
+               spc.SCROLL_COUNT: dfp.SCROLL_COUNT,
+               spc.SCROLL_WAIT_TIME: dfp.SCROLL_WAIT_TIME,
+               spc.SCROLL_TIME_OUT: dfp.SCROLL_TIME_OUT,
+               spc.ERROR_TIME_OUT: dfp.ERROR_TIME_OUT,
+               spc.HIDE_IMAGE_SETTING: dfp.HIDE_IMAGE_SETTING,
+               spc.MAXIMIZE_PAGE_SETTING: dfp.MAXIMIZE_PAGE_SETTING
                }
 
         with open(gc.SETTINGS_FILE_NAME, "w") as f:
@@ -222,13 +227,9 @@ class TabWidget(QTabWidget):
         self.result_tab.url_combo_list.addItem(text)
 
     def error_manage_slot(self, obj, count):
-        if isinstance(obj, seleniumE.WebDriverException) and count ==0:
-            mb("Browser closed unexpectedly!").pop_up_box()
+        if isinstance(obj, seleniumE.WebDriverException) and count == 0:
+            mb(mbc.BROWSER_CLOSED_ERROR).pop_up_box()
             print(type(obj))
-        # elif isinstance(obj, seleniumE.InvalidSessionIdException):
-        #     mb("Invalid Session").pop_up_box()
-        # elif isinstance(obj, seleniumE.NoSuchWindowException):
-        #     mb("Error in Browser Connection!").pop_up_box()
         print(type(obj))
 
 
