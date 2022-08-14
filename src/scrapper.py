@@ -4,7 +4,7 @@ import time
 import os
 import sys
 from platform import machine
-
+from subprocess import CREATE_NO_WINDOW
 
 # selenium
 from selenium.webdriver.common.by import By
@@ -99,7 +99,9 @@ class Scrapper:
                 firefox_profile.set_preference('dom.ipc.plugins.enabled.libflashplayer.so', 'false')
 
             my_dir = resource_path(file_name)
+
             service = Service(executable_path=my_dir)
+            service.creationflags = CREATE_NO_WINDOW
             self.driver = webdriver.Firefox(firefox_profile, service=service)
 
         # for future development and adding new browsers
