@@ -78,4 +78,7 @@ class MessageBoxConstants:
     SCRAPING_FINISHED = "Scraping urls finished!"
     BOX_TITLE = "Attention"
     SAVE_SETTINGS = "Save Complete!"
+    WRONG_URL_TEXT = "Please add a valid url!"
+    NOT_FOUND_URL = "Url not found!"
+    DIVAR_URL = "Please enter a valid url from divar.ir"
 
