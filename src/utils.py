@@ -26,7 +26,14 @@ def file_name_edit(name):
                        "/": "_",
                        "*": "",
                        "-": "",
-                       ":": ""}
+                       ":": "",
+                       "=": "",
+                       "?": "",
+                       "+": "",
+                       "^": "",
+                       '"': "",
+                       "<": "",
+                       ">": ""}
     for k, v in char_to_replace.items():
         name = name.replace(k, v)
 
