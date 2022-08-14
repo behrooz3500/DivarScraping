@@ -17,6 +17,7 @@ from src import memory as mem
 from src import thread as th
 from src import utils
 from src.widgets.message_box import MessageBox as mb
+from resources import resources_rc
 
 # standard
 import json
@@ -88,7 +89,7 @@ class TabWidget(QTabWidget):
         self.move(qt_rectangle.topLeft())
 
         self.setWindowTitle(twc.WINDOWS_TITLE)
-        icon = QIcon("./resources/scrape.ico")
+        icon = QIcon(":/resources/scrape.ico")
         self.setWindowIcon(icon)
 
     def add_btn_clicked(self, url):

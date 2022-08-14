@@ -4,6 +4,7 @@ from PyQt5.QtGui import QIcon
 
 # internal
 from src.constants import MessageBoxConstants as mbc
+from resources import resources_rc
 
 
 class BaseMessageBox:
@@ -11,7 +12,7 @@ class BaseMessageBox:
         super().__init__()
         self.title = mbc.BOX_TITLE
         self.message = ""
-        self.icon = QIcon("./resources/scrape.ico")
+        self.icon = QIcon(":/resources/scrape.ico")
 
     def pop_up_box(self):
         message = QMessageBox()
