@@ -1,7 +1,6 @@
 # PyQt5
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout,\
-    QFormLayout, QPushButton, QLineEdit, QScrollArea,\
-    QPlainTextEdit, QWidget
+    QFormLayout, QPushButton, QPlainTextEdit, QWidget
 
 # internal
 from src.constants import MainTabConstants as mtc
