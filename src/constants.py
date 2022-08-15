@@ -91,7 +91,7 @@ class DefaultSettingsParameters:
     MANUAL_COMBO_CHECKED = False
     SCROLL_COUNT = "1"
     SCROLL_WAIT_TIME = "2"
-    SCROLL_TIME_OUT = "4"
+    SCROLL_TIME_OUT = "10"
     ERROR_TIME_OUT = "30"
     HIDE_IMAGE_SETTING = True
     MAXIMIZE_PAGE_SETTING = True
