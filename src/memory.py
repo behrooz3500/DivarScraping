@@ -2,7 +2,7 @@
 __MEM = dict()
 
 
-def set(key, obj):
+def set_mem(key, obj):
     __MEM[key] = obj
 
 
