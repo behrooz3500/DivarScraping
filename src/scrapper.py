@@ -97,6 +97,7 @@ class Scrapper:
                 firefox_profile.set_preference('permissions.default.image', 2)
                 firefox_profile.set_preference(' javascript.enabled', False)
                 firefox_profile.set_preference('dom.ipc.plugins.enabled.libflashplayer.so', 'false')
+                firefox_profile.set_preference('toolkit.legacyUserProfileCustomizations.stylesheets', 'true')
 
             my_dir = resource_path(file_name)
 
@@ -133,7 +134,8 @@ class Scrapper:
         self.no_time_out = True
 
         # size of the link set before executing a page_down scroll
-        i_len = len(self.links)
+        # i_len = len(self.links)
+        i_len = self.driver.execute_script("return document.body.scrollHeight")
 
         # find body
         body = self.driver.find_element(By.TAG_NAME, "body")
@@ -180,12 +182,13 @@ class Scrapper:
         time.sleep(int(mem.get(spc.SCROLL_WAIT_TIME)))
 
         # final size of gathered links
-        f_len = len(self.links)
+        # f_len = len(self.links)
+        f_len = self.driver.execute_script("return document.body.scrollHeight")
 
         a = utils.file_name_edit(url)
         export_links(self.links, a)
         print(f"{self.count}>>before checks")
-
+        print(f"scroll height diff:{f_len - i_len}")
         # comparing size of gathered link before and after the scroll
         if i_len == f_len:
             self.count += 1
