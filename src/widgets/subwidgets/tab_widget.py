@@ -100,7 +100,7 @@ class TabWidget(QTabWidget):
             if re.search(regex_str, url):
                 if requests.get(url).status_code == 200:
                     self.url_set.add(url)
-                    mem.set(gc.URLS_TEXT, self.url_set)
+                    mem.set_mem(gc.URLS_TEXT, self.url_set)
                     self.main_tab.url_list.clear()
                     self.main_tab.url_text_edit.clear()
                     for url in self.url_set:
@@ -120,14 +120,14 @@ class TabWidget(QTabWidget):
                 setting = json.load(f)
 
             # storing setting parameters in memory dict
-            mem.set(spc.SCROLL_MODE, setting.get(spc.SCROLL_MODE))
-            mem.set(spc.SCROLL_COUNT, setting.get(spc.SCROLL_COUNT))
-            mem.set(spc.SCROLL_WAIT_TIME, setting.get(spc.SCROLL_WAIT_TIME))
-            mem.set(spc.SCROLL_TIME_OUT, setting.get(spc.SCROLL_TIME_OUT))
-            mem.set(spc.HIDE_IMAGE_SETTING, setting.get(spc.HIDE_IMAGE_SETTING))
-            mem.set(spc.MAXIMIZE_PAGE_SETTING, setting.get(spc.MAXIMIZE_PAGE_SETTING))
-            mem.set(gc.PATTERN_TEXT, self.main_tab.pattern_box_edit.text())
-            mem.set(spc.ERROR_TIME_OUT, self.settings_tab.error_loading_wait_time.text())
+            mem.set_mem(spc.SCROLL_MODE, setting.get(spc.SCROLL_MODE))
+            mem.set_mem(spc.SCROLL_COUNT, setting.get(spc.SCROLL_COUNT))
+            mem.set_mem(spc.SCROLL_WAIT_TIME, setting.get(spc.SCROLL_WAIT_TIME))
+            mem.set_mem(spc.SCROLL_TIME_OUT, setting.get(spc.SCROLL_TIME_OUT))
+            mem.set_mem(spc.HIDE_IMAGE_SETTING, setting.get(spc.HIDE_IMAGE_SETTING))
+            mem.set_mem(spc.MAXIMIZE_PAGE_SETTING, setting.get(spc.MAXIMIZE_PAGE_SETTING))
+            mem.set_mem(gc.PATTERN_TEXT, self.main_tab.pattern_box_edit.text())
+            mem.set_mem(spc.ERROR_TIME_OUT, self.settings_tab.error_loading_wait_time.text())
 
             self.result_tab.url_combo_list.clear()
             self.thread.start()
