@@ -1,3 +1,30 @@
+class LinkList:
+
+    def __init__(self):
+        self.my_list = []
+
+    def add(self, link):
+        if link not in self.my_list:
+            self.my_list.append(link)
+
+    def remove(self, link):
+        if link in self.my_list:
+            self.my_list.remove(link)
+
+    def replace(self, link1, link2):
+        if link1 in self.my_list:
+            self.my_list.remove(link1)
+            self.my_list.__add__(link2)
+
+    def len(self):
+        return len(self.my_list)
+
+    def get_all(self):
+        return self.my_list
+
+    def clear_all(self):
+        self.my_list.clear()
+        self.my_list
 
 
 def file_writer(filename, data):
