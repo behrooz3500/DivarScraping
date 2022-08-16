@@ -8,18 +8,22 @@ from resources import resources_rc
 
 
 class BaseMessageBox:
+
     def __init__(self):
         super().__init__()
         self.title = mbc.BOX_TITLE
         self.message = ""
         self.icon = QIcon(":/resources/scrape.ico")
+        self.button = QMessageBox.Ok
+        self.ret = True
 
     def pop_up_box(self):
         message = QMessageBox()
         message.setWindowIcon(self.icon)
         message.setWindowTitle(self.title)
         message.setText(self.message)
-        message.exec_()
+        message.setStandardButtons(self.button)
+        self.ret = message.exec_()
 
 
 class MessageBox(BaseMessageBox):
@@ -29,11 +33,15 @@ class MessageBox(BaseMessageBox):
 
 
 class QuestionMessage(BaseMessageBox):
-    def __init__(self, parent):
-        super().__init__()
 
-    def close_event(self):
-        if self.message == QMessageBox.Yes:
+    def __init__(self, message):
+        super().__init__()
+        self.message = message
+        self.button = QMessageBox.Yes | QMessageBox.No
+
+    def pop_up_box(self):
+        super().pop_up_box()
+        if self.ret == QMessageBox.Yes:
             return True
         else:
             return False
