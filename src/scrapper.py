@@ -21,6 +21,7 @@ from src.constants import GlobalConstants as gc
 # internal
 from src import memory as mem
 from src import utils
+from src.utils import LinkList
 
 
 class Scrapper:
@@ -47,7 +48,7 @@ class Scrapper:
         self.has_progress = True
 
         # set for storing scrapped links
-        self.links = set()
+        self.links = LinkList()
 
         # number of scrolls in current page
         self.scroll_count = 0
@@ -72,7 +73,7 @@ class Scrapper:
         self.no_time_out = True
         self.count = 0
         self.has_progress = True
-        self.links.clear()
+        self.links.clear_all()
         self.scroll_count = 0
         self.store_name.clear()
 
@@ -186,7 +187,7 @@ class Scrapper:
         f_len = self.driver.execute_script("return document.body.scrollHeight")
 
         a = utils.file_name_edit(url)
-        export_links(self.links, a)
+        export_links(self.links.get_all(), a)
         print(f"{self.count}>>before checks")
         print(f"scroll height diff:{f_len - i_len}")
         # comparing size of gathered link before and after the scroll

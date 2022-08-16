@@ -17,6 +17,8 @@ from src import memory as mem
 from src import thread as th
 from src import utils
 from src.widgets.message_box import MessageBox as mb
+from src.utils import LinkList
+
 from resources import resources_rc
 
 # standard
@@ -34,7 +36,7 @@ class TabWidget(QTabWidget):
 
         self.boot_strap()
 
-        self.url_set = set()
+        self.url_list = LinkList()
         self.thread = th.ScrapeEngine()
         self.change_mode = 1
 
@@ -61,7 +63,7 @@ class TabWidget(QTabWidget):
         self.result_tab.show_btn.clicked.connect(self.show_links_btn_clicked)
         self.setTabText(1, twc.TAB_2_NAME)
         self.tab2.setLayout(self.result_tab.main_layout)
-        self.result_tab.url_combo_list.addItems(self.url_set)
+        self.result_tab.url_combo_list.addItems(self.url_list.get_all())
 
         self.settings_tab = st.SettingTab()
         self.setTabText(2, twc.TAB_3_NAME)
@@ -99,11 +101,11 @@ class TabWidget(QTabWidget):
         try:
             if re.search(regex_str, url):
                 if requests.get(url).status_code == 200:
-                    self.url_set.add(url)
-                    mem.set_mem(gc.URLS_TEXT, self.url_set)
+                    self.url_list.add(url)
+                    mem.set_mem(gc.URLS_TEXT, self.url_list.get_all())
                     self.main_tab.url_list.clear()
                     self.main_tab.url_text_edit.clear()
-                    for url in self.url_set:
+                    for url in self.url_list.get_all():
                         self.main_tab.url_list.appendPlainText(url)
                     self.main_tab.start_btn.setDisabled(False)
                 else:
@@ -115,7 +117,7 @@ class TabWidget(QTabWidget):
             mb(mbc.NO_URL_EXIST).pop_up_box()
 
     def start_btn_clicked(self):
-        if self.url_set:
+        if self.url_list.get_all():
             with open(gc.SETTINGS_FILE_NAME, 'r') as f:
                 setting = json.load(f)
 
@@ -209,7 +211,7 @@ class TabWidget(QTabWidget):
         url_list = url_list.replace(text, f"Scraping links finished>>{text}<<")
         self.main_tab.url_list.clear()
         self.main_tab.url_list.setPlainText(url_list)
-        self.url_set.remove(text)
+        self.url_list.remove(text)
 
     def update_link_count(self, text, count):
         url_list = self.main_tab.url_list.toPlainText()
