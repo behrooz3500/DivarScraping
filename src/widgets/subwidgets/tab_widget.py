@@ -102,8 +102,9 @@ class TabWidget(QTabWidget):
         try:
             if re.search(regex_str, url):
                 if requests.get(url).status_code == 200:
-                    if utils.check_url_existence(url):
-                        mem.set_mem(url, qb(mbc.URL_ALREADY_EXISTS).pop_up_box())
+                    if (utils.check_url_existence(url)
+                            and qb(mbc.URL_ALREADY_EXISTS).pop_up_box()):
+                        mem.set_mem(url, True)
                     self.url_list.add(url)
                     mem.set_mem(gc.URLS_TEXT, self.url_list.get_all())
                     self.main_tab.url_list.clear()
