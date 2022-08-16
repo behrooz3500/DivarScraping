@@ -73,6 +73,7 @@ class ScrapperConstants:
     DIVAR_STORE_CLASS_NAME = "kt-post-card__bottom-description"
     DIVAR_ATT1 = "پیش"
     DIVAR_ATT2 = "روز"
+    DIVAR_ATT3 = "فوری"
     FIREFOX_32_DRIVER_DIR = "./Drivers/geckodriver32.exe"
     FIREFOX_64_DRIVER_DIR = "./Drivers/geckodriver64.exe"
     WAIT_TIME_AFTER_TIMEOUT_CLICK = 5
