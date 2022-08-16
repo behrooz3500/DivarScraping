@@ -17,11 +17,13 @@ from selenium.webdriver.firefox.service import Service
 from src.constants import ScrapperConstants as sc
 from src.constants import SettingsParameterConstants as spc
 from src.constants import GlobalConstants as gc
+from src.constants import MessageBoxConstants as mbc
 
 # internal
 from src import memory as mem
 from src import utils
 from src.utils import LinkList
+from src.widgets.message_box import QuestionMessage as qb
 
 
 class Scrapper:
@@ -170,7 +172,10 @@ class Scrapper:
             for i in range(int(mem.get(spc.ERROR_TIME_OUT))):
                 time.sleep(1)
                 print(i + 1)
-            e.click()
+            try:
+                e.click()
+            except:
+                print("DO NOT TOUCH ME!")
 
             # waiting for some time to let windows elements load
             time.sleep(sc.WAIT_TIME_AFTER_TIMEOUT_CLICK)
@@ -179,28 +184,30 @@ class Scrapper:
             self.no_time_out = False
 
         if self.no_time_out:
+            try:
+                for a in anchors:
+                    href = a.get_attribute('href')
+                    if href.startswith(mem.get(gc.PATTERN_TEXT)):
 
-            for a in anchors:
-                href = a.get_attribute('href')
-                if href.startswith(mem.get(gc.PATTERN_TEXT)):
-
-                    # finding store advertisements by their class name
-                    class_name = a.find_elements(By.CLASS_NAME, sc.DIVAR_STORE_CLASS_NAME)
-                    for cl in class_name:
-                        attr = cl.get_attribute('title')
-                        if (attr.find(sc.DIVAR_ATT1) == -1
-                                and attr.find(sc.DIVAR_ATT2) == -1
-                                and attr.find(sc.DIVAR_ATT3) == -1):
-                            self.store_name.append(attr)
-                        if self.continue_from_history:
-                            if (attr not in self.saved_stores.get_all()
-                                    and self.store_name.count(attr) < 2):
-                                self.links.add(unquote(href))
-                                self.added_link += 1
-                        else:
-                            if self.store_name.count(attr) < 2:
-                                self.links.add(unquote(href))
-                                self.added_link += 1
+                        # finding store advertisements by their class name
+                        class_name = a.find_elements(By.CLASS_NAME, sc.DIVAR_STORE_CLASS_NAME)
+                        for cl in class_name:
+                            attr = cl.get_attribute('title')
+                            if (attr.find(sc.DIVAR_ATT1) == -1
+                                    and attr.find(sc.DIVAR_ATT2) == -1
+                                    and attr.find(sc.DIVAR_ATT3) == -1):
+                                self.store_name.append(attr)
+                            if self.continue_from_history:
+                                if (attr not in self.saved_stores.get_all()
+                                        and self.store_name.count(attr) < 2):
+                                    self.links.add(unquote(href))
+                                    self.added_link += 1
+                            else:
+                                if self.store_name.count(attr) < 2:
+                                    self.links.add(unquote(href))
+                                    self.added_link += 1
+            except:
+                print("JUST PASSED EVERYTHING")
 
         # execute a page_down scroll
         body.send_keys(Keys.PAGE_DOWN)
