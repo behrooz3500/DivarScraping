@@ -28,6 +28,7 @@ class Scrapper:
     """
     Class to define scraping method from defined url\n
     """
+
     def __init__(self, browser=sc.FIREFOX_BROWSER_NAME):
         # number of scrolls in manual mode
         self.scroll_count = mem.get(spc.SCROLL_COUNT)
@@ -78,7 +79,7 @@ class Scrapper:
         self.has_progress = True
         self.links.clear_all()
         self.saved_stores.clear_all()
-
+        print(mem.keys())
         if url in mem.keys():
             self.links = utils.file_reader(url)
             self.saved_stores = utils.file_reader(f"stores{url}")
@@ -168,7 +169,7 @@ class Scrapper:
         for e in errors:
             for i in range(int(mem.get(spc.ERROR_TIME_OUT))):
                 time.sleep(1)
-                print(i+1)
+                print(i + 1)
             e.click()
 
             # waiting for some time to let windows elements load
@@ -187,7 +188,9 @@ class Scrapper:
                     class_name = a.find_elements(By.CLASS_NAME, sc.DIVAR_STORE_CLASS_NAME)
                     for cl in class_name:
                         attr = cl.get_attribute('title')
-                        if attr.find(sc.DIVAR_ATT1) == -1 and attr.find(sc.DIVAR_ATT2) == -1:
+                        if (attr.find(sc.DIVAR_ATT1) == -1
+                                and attr.find(sc.DIVAR_ATT2) == -1
+                                and attr.find(sc.DIVAR_ATT3) == -1):
                             self.store_name.append(attr)
                         if self.continue_from_history:
                             if (attr not in self.saved_stores.get_all()
