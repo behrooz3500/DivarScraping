@@ -55,9 +55,12 @@ class Scrapper:
 
         # a list to detect store advertisements
         self.store_name = []
+        self.saved_stores = LinkList()
+        self.continue_from_history = False
         self.count = 0
+        self.added_link = 0
 
-        # if a time out has happened
+        # if a timeout has happened
         self.no_time_out = True
 
     def initialize(self, url):
@@ -74,8 +77,18 @@ class Scrapper:
         self.count = 0
         self.has_progress = True
         self.links.clear_all()
+        self.saved_stores.clear_all()
+
+        if url in mem.keys():
+            self.links = utils.file_reader(url)
+            self.saved_stores = utils.file_reader(f"stores{url}")
+            self.continue_from_history = True
+        else:
+            self.continue_from_history = False
         self.scroll_count = 0
         self.store_name.clear()
+
+        self.added_link = 0
 
         def resource_path(relative_path):
             """locating webDriver for the browsser in debug mode and exe mode"""
@@ -132,6 +145,8 @@ class Scrapper:
         """
         scrapping link from selected url using selenium
         """
+        print(f"store:{self.saved_stores.len()}")
+        print(f"links:{self.links.len()}")
         self.no_time_out = True
 
         # size of the link set before executing a page_down scroll
@@ -149,6 +164,7 @@ class Scrapper:
 
         # when time_out button appears, scrapper will wait for a defined
         # time specified in settings and then executes button click
+
         for e in errors:
             for i in range(int(mem.get(spc.ERROR_TIME_OUT))):
                 time.sleep(1)
@@ -173,8 +189,15 @@ class Scrapper:
                         attr = cl.get_attribute('title')
                         if attr.find(sc.DIVAR_ATT1) == -1 and attr.find(sc.DIVAR_ATT2) == -1:
                             self.store_name.append(attr)
-                        if self.store_name.count(attr) < 2:
-                            self.links.add(unquote(href))
+                        if self.continue_from_history:
+                            if (attr not in self.saved_stores.get_all()
+                                    and self.store_name.count(attr) < 2):
+                                self.links.add(unquote(href))
+                                self.added_link += 1
+                        else:
+                            if self.store_name.count(attr) < 2:
+                                self.links.add(unquote(href))
+                                self.added_link += 1
 
         # execute a page_down scroll
         body.send_keys(Keys.PAGE_DOWN)
@@ -185,9 +208,11 @@ class Scrapper:
         # final size of gathered links
         # f_len = len(self.links)
         f_len = self.driver.execute_script("return document.body.scrollHeight")
-
-        a = utils.file_name_edit(url)
-        export_links(self.links.get_all(), a)
+        print(self.links.len())
+        for stores in self.store_name:
+            self.saved_stores.add(stores)
+        export_links(self.saved_stores.get_all(), f"stores{url}")
+        export_links(self.links.get_all(), url)
         print(f"{self.count}>>before checks")
         print(f"scroll height diff:{f_len - i_len}")
         # comparing size of gathered link before and after the scroll
@@ -201,6 +226,7 @@ class Scrapper:
 
         print(f"{self.count}>>after checks")
         self.scroll_count += 1
+        print(f"{self.added_link} new links added")
 
     def close_current_driver(self):
         self.driver.close()
@@ -209,10 +235,17 @@ class Scrapper:
         return self.has_progress
 
 
-def export_links(generated_links, name):
+def export_links(generated_links, url):
     """Export results to a txt file"""
+    name = utils.file_name_edit(url)
+    action = 'wt'
+    # if url in mem.keys():
+    #     print("existing")
+    #     action = 'at'
+    # else:
+    #     print("new text file")
 
-    with open(f"{name}.txt", 'wt', encoding="utf-8") as f:
+    with open(f"{name}.txt", action, encoding="utf-8") as f:
         for i, link in enumerate(generated_links, 1):
             f.write(f'{link}\n\n')
 
