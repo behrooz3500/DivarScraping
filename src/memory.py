@@ -13,3 +13,7 @@ def get(key, default=None):
 def delete(key):
     if key in __MEM:
         del __MEM[key]
+
+
+def keys():
+    return __MEM.keys()
