@@ -77,6 +77,7 @@ def file_name_edit(name):
 
 def check_url_existence(url):
     file_name = f"{file_name_edit(url)}.txt"
+    print(gc.ROOT_DIR)
     if file_name in os.listdir(gc.ROOT_DIR):
         return True
     else:

@@ -1,5 +1,6 @@
 # standard
 import sys
+import os
 
 class TabWidgetConstants:
     TAB_1_NAME = "main"
@@ -65,7 +66,9 @@ class GlobalConstants:
     URLS_TEXT = "urls"
     SETTINGS_FILE_NAME = "settings.json"
     PATTERN_TEXT = "pattern"
-    ROOT_DIR = sys.path[1]
+    # ROOT_DIR = sys.path[1]
+    # ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
+    ROOT_DIR = os.path.abspath(os.curdir)
 
 
 class ScrapperConstants:
