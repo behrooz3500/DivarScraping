@@ -17,6 +17,7 @@ from src import memory as mem
 from src import thread as th
 from src import utils
 from src.widgets.message_box import MessageBox as mb
+from src.widgets.message_box import QuestionMessage as qb
 from src.utils import LinkList
 
 from resources import resources_rc
@@ -101,6 +102,8 @@ class TabWidget(QTabWidget):
         try:
             if re.search(regex_str, url):
                 if requests.get(url).status_code == 200:
+                    if utils.check_url_existence(url):
+                        mem.set_mem(url, qb(mbc.URL_ALREADY_EXISTS).pop_up_box())
                     self.url_list.add(url)
                     mem.set_mem(gc.URLS_TEXT, self.url_list.get_all())
                     self.main_tab.url_list.clear()
@@ -157,8 +160,8 @@ class TabWidget(QTabWidget):
     def show_links_btn_clicked(self):
         text = self.result_tab.url_combo_list.currentText()
         self.result_tab.result_links.clear()
-        temp_list = utils.file_reader(utils.file_name_edit(text))
-        for link in temp_list:
+        temp_list = utils.file_reader(text)
+        for link in temp_list.get_all():
             self.result_tab.result_links.appendPlainText(link)
 
     def manual_radio_button_trigger(self, tr):
