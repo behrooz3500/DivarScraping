@@ -89,7 +89,7 @@ class MessageBoxConstants:
     DIVAR_URL = "Please enter a valid url from divar.ir"
     BROWSER_CLOSED_ERROR = "Browser closed unexpectedly!"
     URL_ALREADY_EXISTS = "This url already exists. Do you want to continue from last search?"
-
+    TIME_OUT_CONDITION_MESSAGE = "Scraping finished! Do you want to try for more link?"
 
 class DefaultSettingsParameters:
     SCROLL_MODE = "automatic"
