@@ -140,4 +140,4 @@ LICENSE
 main.spec
 
 # txt files
-.txt
+*.txt
