@@ -1,3 +1,6 @@
+# standard
+import sys
+
 class TabWidgetConstants:
     TAB_1_NAME = "main"
     TAB_2_NAME = "Result"
@@ -62,6 +65,7 @@ class GlobalConstants:
     URLS_TEXT = "urls"
     SETTINGS_FILE_NAME = "settings.json"
     PATTERN_TEXT = "pattern"
+    ROOT_DIR = sys.path[1]
 
 
 class ScrapperConstants:
@@ -83,6 +87,7 @@ class MessageBoxConstants:
     NOT_FOUND_URL = "Url not found!"
     DIVAR_URL = "Please enter a valid url from divar.ir"
     BROWSER_CLOSED_ERROR = "Browser closed unexpectedly!"
+    URL_ALREADY_EXISTS = "This url already exists. Do you want to continue from last search?"
 
 
 class DefaultSettingsParameters:
