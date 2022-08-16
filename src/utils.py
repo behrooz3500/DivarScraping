@@ -1,3 +1,10 @@
+# standard
+import os
+
+# internal
+from src.constants import GlobalConstants as gc
+
+
 class LinkList:
 
     def __init__(self):
@@ -24,7 +31,7 @@ class LinkList:
 
     def clear_all(self):
         self.my_list.clear()
-        self.my_list
+        return self.my_list
 
 
 def file_writer(filename, data):
@@ -32,14 +39,15 @@ def file_writer(filename, data):
         f.write(f"{data}\n")
 
 
-def file_reader(filename):
-    read_set = set()
+def file_reader(url):
+    filename = file_name_edit(url)
+    read_list = LinkList()
     with open(f"{filename}.txt", "rt", encoding="utf-8") as f:
         for line in f:
             stripped_line = line.strip()
-            read_set.add(stripped_line)
+            read_list.add(stripped_line)
 
-    return read_set
+    return read_list
 
 
 def file_appender(filename, data):
@@ -65,3 +73,12 @@ def file_name_edit(name):
         name = name.replace(k, v)
 
     return name
+
+
+def check_url_existence(url):
+    file_name = f"{file_name_edit(url)}.txt"
+    if file_name in os.listdir(gc.ROOT_DIR):
+        return True
+    else:
+        return False
+
