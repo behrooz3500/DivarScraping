@@ -56,8 +56,13 @@ class Scrapper:
 
         # a list to detect store advertisements
         self.store_name = []
+
+        # list of stores from a previous search
         self.saved_stores = LinkList()
+
+        # user selection to continue from a previous search
         self.continue_from_history = False
+
         self.count = 0
         self.added_link = 0
 
@@ -79,10 +84,11 @@ class Scrapper:
         self.has_progress = True
         self.links.clear_all()
         self.saved_stores.clear_all()
-        print(mem.keys())
+
+        # if user want to continue from a previous search
         if url in mem.keys():
             self.links = utils.file_reader(url)
-            self.saved_stores = utils.file_reader(f"stores{url}")
+            self.saved_stores = utils.file_reader(f"{sc.STORE_PREFIX}{url}")
             self.continue_from_history = True
         else:
             self.continue_from_history = False
@@ -117,7 +123,10 @@ class Scrapper:
             my_dir = resource_path(file_name)
 
             service = Service(executable_path=my_dir)
+
+            # disabling webdriver console
             service.creationflags = CREATE_NO_WINDOW
+
             self.driver = webdriver.Firefox(firefox_profile, service=service)
 
         # for future development and adding new browsers
@@ -152,6 +161,8 @@ class Scrapper:
 
         # size of the link set before executing a page_down scroll
         # i_len = len(self.links)
+
+        # height of the current window before scroll
         i_len = self.driver.execute_script("return document.body.scrollHeight")
 
         # find body
@@ -165,7 +176,6 @@ class Scrapper:
 
         # when time_out button appears, scrapper will wait for a defined
         # time specified in settings and then executes button click
-
         for e in errors:
             for i in range(int(mem.get(spc.ERROR_TIME_OUT))):
                 time.sleep(1)
@@ -191,10 +201,12 @@ class Scrapper:
                         class_name = a.find_elements(By.CLASS_NAME, sc.DIVAR_STORE_CLASS_NAME)
                         for cl in class_name:
                             attr = cl.get_attribute('title')
+                            # if it's a store ad
                             if (attr.find(sc.DIVAR_ATT1) == -1
                                     and attr.find(sc.DIVAR_ATT2) == -1
                                     and attr.find(sc.DIVAR_ATT3) == -1):
                                 self.store_name.append(attr)
+                            # continuing from previous search
                             if self.continue_from_history:
                                 if (attr not in self.saved_stores.get_all()
                                         and self.store_name.count(attr) < 2):
@@ -215,20 +227,28 @@ class Scrapper:
 
         # final size of gathered links
         # f_len = len(self.links)
+
+        # height of current window after scrolling
         f_len = self.driver.execute_script("return document.body.scrollHeight")
-        print(self.links.len())
+
+        # saving new stores name
         for stores in self.store_name:
             self.saved_stores.add(stores)
-        export_links(self.saved_stores.get_all(), f"stores{url}")
+
+        # exporting links and stores name to a file after each scroll
+        export_links(self.saved_stores.get_all(), f"{sc.STORE_PREFIX}{url}")
         export_links(self.links.get_all(), url)
+
         print(f"{self.count}>>before checks")
         print(f"scroll height diff:{f_len - i_len}")
-        # comparing size of gathered link before and after the scroll
+
+        # comparing height of the window before and after the scroll
         if i_len == f_len:
             self.count += 1
         else:
             self.count = 0
-        print(self.time_out)
+
+        # informing there is no new progress after scrolling
         if self.count > int(self.time_out):
             self.has_progress = False
 
@@ -247,11 +267,6 @@ def export_links(generated_links, url):
     """Export results to a txt file"""
     name = utils.file_name_edit(url)
     action = 'wt'
-    # if url in mem.keys():
-    #     print("existing")
-    #     action = 'at'
-    # else:
-    #     print("new text file")
 
     with open(f"{name}.txt", action, encoding="utf-8") as f:
         for i, link in enumerate(generated_links, 1):
@@ -259,4 +274,5 @@ def export_links(generated_links, url):
 
 
 def win_arch():
+    """find architecture of user's os"""
     return '64' if machine().endswith('64') else '32'
