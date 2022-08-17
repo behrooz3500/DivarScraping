@@ -131,7 +131,9 @@ dmypy.json
 # folders
 dist/
 build/
+.idea/
 .idea
+idea/
 
 # local files
 links.txt
