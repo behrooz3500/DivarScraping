@@ -3,7 +3,7 @@ import os
 
 
 class TabWidgetConstants:
-    TAB_1_NAME = "main"
+    TAB_1_NAME = "Main"
     TAB_2_NAME = "Result"
     TAB_3_NAME = "Settings"
     RESUME_BUTTON_TEXT = "Resume"
@@ -66,9 +66,9 @@ class GlobalConstants:
     URLS_TEXT = "urls"
     SETTINGS_FILE_NAME = "settings.json"
     PATTERN_TEXT = "pattern"
-    # ROOT_DIR = sys.path[1]
-    # ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
     ROOT_DIR = os.path.abspath(os.curdir)
+    APP_ICON_DIR = ":/resources/scrape.ico"
+    URL_REGEX_STRING = "^https://divar.ir"
 
 
 class ScrapperConstants:
@@ -80,6 +80,7 @@ class ScrapperConstants:
     FIREFOX_32_DRIVER_DIR = "./Drivers/geckodriver32.exe"
     FIREFOX_64_DRIVER_DIR = "./Drivers/geckodriver64.exe"
     WAIT_TIME_AFTER_TIMEOUT_CLICK = 5
+    STORE_PREFIX = "stores"
 
 
 class MessageBoxConstants:
@@ -99,9 +100,9 @@ class DefaultSettingsParameters:
     SCROLL_MODE = "automatic"
     AUTOMATIC_COMBO_CHECKED = True
     MANUAL_COMBO_CHECKED = False
-    SCROLL_COUNT = "1"
-    SCROLL_WAIT_TIME = "2"
+    SCROLL_COUNT = "10"
+    SCROLL_WAIT_TIME = "3"
     SCROLL_TIME_OUT = "10"
-    ERROR_TIME_OUT = "30"
+    ERROR_TIME_OUT = "5"
     HIDE_IMAGE_SETTING = True
     MAXIMIZE_PAGE_SETTING = True
