@@ -6,11 +6,13 @@ from src.constants import GlobalConstants as gc
 
 
 class LinkList:
+    """A customized list"""
 
     def __init__(self):
         self.my_list = []
 
     def add(self, link):
+        """only adding new parameters"""
         if link not in self.my_list:
             self.my_list.append(link)
 
@@ -56,7 +58,7 @@ def file_appender(filename, data):
 
 
 def file_name_edit(name):
-    """change urls to be appliable for a text file"""
+    """change urls to be applicable for a text file"""
     char_to_replace = {".": "_",
                        "/": "_",
                        "*": "",
@@ -76,6 +78,7 @@ def file_name_edit(name):
 
 
 def check_url_existence(url):
+    """Checking if a url has previous search result(a text file)"""
     file_name = f"{file_name_edit(url)}.txt"
     print(gc.ROOT_DIR)
     if file_name in os.listdir(gc.ROOT_DIR):
