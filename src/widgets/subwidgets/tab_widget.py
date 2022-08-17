@@ -19,7 +19,6 @@ from src import utils
 from src.widgets.message_box import MessageBox as mb
 from src.widgets.message_box import QuestionMessage as qb
 from src.utils import LinkList
-
 from resources import resources_rc
 
 # standard
@@ -39,6 +38,8 @@ class TabWidget(QTabWidget):
 
         self.url_list = LinkList()
         self.thread = th.ScrapeEngine()
+
+        # used to change the functionality of pause/resume button
         self.change_mode = 1
 
         # defining tabs for the tab widget
@@ -50,6 +51,7 @@ class TabWidget(QTabWidget):
         self.addTab(self.tab2, "Tab 2")
         self.addTab(self.tab3, "Tab 3")
 
+        # Main tab widget
         self.main_tab = mt.MainTab()
         self.main_tab.url_add_btn.clicked.connect(lambda: self.add_btn_clicked(self.main_tab.url_text_edit.text()))
         self.main_tab.start_btn.clicked.connect(self.start_btn_clicked)
@@ -60,12 +62,14 @@ class TabWidget(QTabWidget):
         self.setTabText(0, twc.TAB_1_NAME)
         self.tab1.setLayout(self.main_tab.main_layout)
 
+        # Result tab widget
         self.result_tab = rt.ResultTab()
         self.result_tab.show_btn.clicked.connect(self.show_links_btn_clicked)
         self.setTabText(1, twc.TAB_2_NAME)
         self.tab2.setLayout(self.result_tab.main_layout)
         self.result_tab.url_combo_list.addItems(self.url_list.get_all())
 
+        # Setting tab widget
         self.settings_tab = st.SettingTab()
         self.setTabText(2, twc.TAB_3_NAME)
         self.settings_tab.manual_radio_btn.toggled.connect(
@@ -75,10 +79,19 @@ class TabWidget(QTabWidget):
         self.settings_tab.save_btn.clicked.connect(self.save_settings_btn_clicked)
         self.tab3.setLayout(self.settings_tab.main_layout)
 
+        # signal after each scroll
         self.thread.signals.refresh.connect(self.update_gui)
+
+        # signal after all urls completed
         self.thread.signals.completed.connect(self.completed_scraping_slot)
+
+        # signal for beginning a new url
         self.thread.signals.begin_a_url.connect(self.add_new_url_to_combobox)
+
+        # signal for errors
         self.thread.signals.error.connect(self.error_manage_slot)
+
+        # signal for counting scrolls for each url
         self.thread.signals.scroll_counter.connect(self.update_link_count)
 
     def boot_strap(self):
@@ -92,16 +105,20 @@ class TabWidget(QTabWidget):
         self.move(qt_rectangle.topLeft())
 
         self.setWindowTitle(twc.WINDOWS_TITLE)
-        icon = QIcon(":/resources/scrape.ico")
+        icon = QIcon(gc.APP_ICON_DIR)
         self.setWindowIcon(icon)
 
     def add_btn_clicked(self, url):
 
         # checking urls (must be valid urls from divar.ir)
-        regex_str = "^https://divar.ir"
+        regex_str = gc.URL_REGEX_STRING
         try:
+            # checking url belong to divar.ir
             if re.search(regex_str, url):
+                # checking that url exists
                 if requests.get(url).status_code == 200:
+                    # checking if there is a result for the selected url and
+                    # if the user want to continue from previous search
                     if (utils.check_url_existence(url)
                             and qb(mbc.URL_ALREADY_EXISTS).pop_up_box()):
                         mem.set_mem(url, True)
@@ -147,18 +164,22 @@ class TabWidget(QTabWidget):
             mb(mbc.NO_URL_EXIST).pop_up_box()
 
     def pause_btn_clicked(self):
+        # pause
         if self.change_mode == 1:
             self.thread.pause()
             self.main_tab.pause_btn.setText(twc.RESUME_BUTTON_TEXT)
+        # resume
         elif self.change_mode == -1:
             self.thread.resume()
             self.main_tab.pause_btn.setText(twc.PAUSE_BUTTON_TEXT)
+        # change between modes
         self.change_mode *= -1
 
     def stop_btn_clicked(self):
         self.thread.stop()
 
     def show_links_btn_clicked(self):
+        # show the results of ongoing and finished searches
         text = self.result_tab.url_combo_list.currentText()
         self.result_tab.result_links.clear()
         temp_list = utils.file_reader(text)
@@ -166,12 +187,14 @@ class TabWidget(QTabWidget):
             self.result_tab.result_links.appendPlainText(link)
 
     def manual_radio_button_trigger(self, tr):
+        # change scrolling type based on a radio button in setting tab
         if tr.isChecked():
             self.settings_tab.scroll_number.setDisabled(False)
         else:
             self.settings_tab.scroll_number.setDisabled(True)
 
     def restore_defaults_clicked(self):
+        # restore to default settings
         self.settings_tab.automatic_radio_btn.setChecked(dfp.AUTOMATIC_COMBO_CHECKED)
         self.settings_tab.time_out_edit.setText(dfp.SCROLL_TIME_OUT)
         self.settings_tab.scroll_wait_time_edit.setText(dfp.SCROLL_WAIT_TIME)
@@ -192,6 +215,7 @@ class TabWidget(QTabWidget):
             json.dump(dic, f)
 
     def save_settings_btn_clicked(self):
+        # save current settings
         if self.settings_tab.automatic_radio_btn.isChecked():
             scroll_mode = spc.SCROLL_MODE_AUTO
         else:
@@ -211,6 +235,7 @@ class TabWidget(QTabWidget):
         mb(mbc.SAVE_SETTINGS).pop_up_box()
 
     def update_gui(self, text):
+        # update main tab after each scroll
         url_list = self.main_tab.url_list.toPlainText()
         url_list = url_list.replace(text, f"Scraping links finished>>{text}<<")
         self.main_tab.url_list.clear()
@@ -218,6 +243,7 @@ class TabWidget(QTabWidget):
         self.url_list.remove(text)
 
     def update_link_count(self, text, count):
+        # update number of scrolls for each url after each scroll
         url_list = self.main_tab.url_list.toPlainText()
         if count == 1:
             url_list = url_list.replace(text, f"{text}: had {count} scrolls")
@@ -227,6 +253,7 @@ class TabWidget(QTabWidget):
         self.main_tab.url_list.setPlainText(url_list)
 
     def completed_scraping_slot(self):
+        # setting buttons at the end of scrapping all urls
         mb(mbc.SCRAPING_FINISHED).pop_up_box()
         self.main_tab.start_btn.setDisabled(False)
         self.main_tab.pause_btn.setDisabled(True)
@@ -236,10 +263,11 @@ class TabWidget(QTabWidget):
         self.main_tab.pattern_box_edit.setDisabled(False)
 
     def add_new_url_to_combobox(self, text):
-
+        # adding url texts to the result tab combo box
         self.result_tab.url_combo_list.addItem(text)
 
     def error_manage_slot(self, obj, count):
+        # showing errors based on signal from engine thread
         if isinstance(obj, seleniumE.WebDriverException) and count == 0:
             mb(mbc.BROWSER_CLOSED_ERROR).pop_up_box()
             print(type(obj))

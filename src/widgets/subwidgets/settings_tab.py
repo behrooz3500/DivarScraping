@@ -52,6 +52,7 @@ class SettingTab(QWidget):
         self.btn_layout.addWidget(self.save_btn)
         self.btn_layout.addWidget(self.default_btn)
 
+        # Setting parameters based on current settings.json file
         with open(gc.SETTINGS_FILE_NAME, "rt") as f:
             setting = json.load(f)
 
