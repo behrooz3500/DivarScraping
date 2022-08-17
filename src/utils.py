@@ -82,4 +82,3 @@ def check_url_existence(url):
         return True
     else:
         return False
-

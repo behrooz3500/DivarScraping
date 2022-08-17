@@ -17,13 +17,11 @@ from selenium.webdriver.firefox.service import Service
 from src.constants import ScrapperConstants as sc
 from src.constants import SettingsParameterConstants as spc
 from src.constants import GlobalConstants as gc
-from src.constants import MessageBoxConstants as mbc
 
 # internal
 from src import memory as mem
 from src import utils
 from src.utils import LinkList
-from src.widgets.message_box import QuestionMessage as qb
 
 
 class Scrapper:

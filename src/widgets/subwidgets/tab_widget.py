@@ -244,5 +244,3 @@ class TabWidget(QTabWidget):
             mb(mbc.BROWSER_CLOSED_ERROR).pop_up_box()
             print(type(obj))
         print(type(obj))
-
-

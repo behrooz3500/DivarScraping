@@ -45,5 +45,3 @@ class QuestionMessage(BaseMessageBox):
             return True
         else:
             return False
-
-

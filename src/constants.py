@@ -1,6 +1,6 @@
 # standard
-import sys
 import os
+
 
 class TabWidgetConstants:
     TAB_1_NAME = "main"
@@ -93,6 +93,7 @@ class MessageBoxConstants:
     BROWSER_CLOSED_ERROR = "Browser closed unexpectedly!"
     URL_ALREADY_EXISTS = "This url already exists. Do you want to continue from last search?"
     TIME_OUT_CONDITION_MESSAGE = "Scraping finished! Do you want to try for more link?"
+
 
 class DefaultSettingsParameters:
     SCROLL_MODE = "automatic"
